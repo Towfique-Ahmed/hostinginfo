@@ -1,0 +1,9 @@
+{
+    "name": "hostinginfo/hostinginfo",
+    "description": "HostingInfo — a directory of web hosting providers, provider profiles, and hosting deals.",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.0"
+    }
+}
