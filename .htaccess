@@ -1,0 +1,29 @@
+# HostingInfo — clean URL routing
+# Serves pages without a .php extension and maps /provider/<slug> to provider.php.
+
+Options -MultiViews
+DirectoryIndex index.php
+
+RewriteEngine On
+RewriteBase /
+
+# 1) Canonicalize old query-string provider links: /provider.php?slug=X -> /provider/X
+RewriteCond %{THE_REQUEST} \s/+provider\.php\?slug=([a-zA-Z0-9\-]+)[\s&] [NC]
+RewriteRule ^ /provider/%1? [R=301,L]
+
+# 2) Canonicalize direct requests for index.php to the site root
+RewriteCond %{THE_REQUEST} \s/+index\.php[\s?] [NC]
+RewriteRule ^ /? [R=301,L]
+
+# 3) Canonicalize any other direct .php request to its extensionless URL
+RewriteCond %{THE_REQUEST} \s/+([^.\s]+)\.php[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# 4) Internally map /provider/<slug> to provider.php?slug=<slug>
+RewriteRule ^provider/([a-zA-Z0-9\-]+)/?$ provider.php?slug=$1 [L,QSA]
+
+# 5) Internally map extensionless page requests (e.g. /providers, /deals) to their .php file
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteRule ^([a-zA-Z0-9_\-]+)/?$ $1.php [L,QSA]

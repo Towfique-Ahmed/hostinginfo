@@ -2,8 +2,8 @@
 declare(strict_types=1);
 require_once __DIR__ . '/includes/functions.php';
 
-$page_title = 'HostRadar — Discover the Best Hosting Providers Worldwide';
-$page_description = 'Explore in-depth profiles of hosting providers from every continent, compare plans, and grab the top 10 hosting deals available right now.';
+$page_title = 'HostingInfo — Compare Web Hosting Providers & Find the Best Hosting Deals';
+$page_description = 'Compare 35+ web hosting providers from around the world, read in-depth reviews, and grab the top 10 hosting deals and coupon codes — updated regularly.';
 $active_nav = 'home';
 
 $providers = get_providers();
@@ -26,9 +26,9 @@ require __DIR__ . '/includes/header.php';
     <div class="container">
         <span class="hero__eyebrow"><span class="dot"></span> Tracking <?= count($providers) ?> hosting providers across <?= count($countries) ?> countries</span>
         <h1>Find your perfect <span class="gradient-text">hosting match</span>, anywhere in the world.</h1>
-        <p class="lead">HostRadar is an independent directory of web hosting providers — compare pricing, uptime and features, then grab the deal that fits.</p>
+        <p class="lead">HostingInfo is an independent directory of web hosting providers — compare pricing, uptime and features, then grab the deal that fits.</p>
 
-        <form class="search-shell" action="/providers.php" method="get">
+        <form class="search-shell" action="<?= url('providers') ?>" method="get">
             <div class="search-box">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
                 <input type="text" name="q" placeholder="Search by provider, country, or feature…" aria-label="Search hosting providers">
@@ -37,11 +37,11 @@ require __DIR__ . '/includes/header.php';
         </form>
 
         <div class="hero__chips">
-            <a class="chip" href="/providers.php?category=WordPress">📝 WordPress</a>
-            <a class="chip" href="/providers.php?category=VPS">🧩 VPS</a>
-            <a class="chip" href="/providers.php?category=Cloud">☁️ Cloud</a>
-            <a class="chip" href="/providers.php?category=Dedicated">🗄️ Dedicated</a>
-            <a class="chip" href="/deals.php">🔥 Hot Deals</a>
+            <a class="chip" href="<?= url('providers', ['category' => 'WordPress']) ?>">📝 WordPress</a>
+            <a class="chip" href="<?= url('providers', ['category' => 'VPS']) ?>">🧩 VPS</a>
+            <a class="chip" href="<?= url('providers', ['category' => 'Cloud']) ?>">☁️ Cloud</a>
+            <a class="chip" href="<?= url('providers', ['category' => 'Dedicated']) ?>">🗄️ Dedicated</a>
+            <a class="chip" href="<?= url('deals') ?>">🔥 Hot Deals</a>
         </div>
 
         <div class="stats-row">
@@ -73,7 +73,7 @@ require __DIR__ . '/includes/header.php';
                 <h2>Top 10 hosting deals right now</h2>
                 <p>Hand-picked discounts and coupon codes from providers around the globe — refreshed regularly.</p>
             </div>
-            <a href="/deals.php" class="section-head__link">See all deals
+            <a href="<?= url('deals') ?>" class="section-head__link">See all deals
                 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
         </div>
@@ -110,7 +110,7 @@ require __DIR__ . '/includes/header.php';
                             <div class="countdown__unit"><span class="countdown__num" data-unit="m">00</span><span class="countdown__label">Min</span></div>
                             <div class="countdown__unit"><span class="countdown__num" data-unit="s">00</span><span class="countdown__label">Sec</span></div>
                         </div>
-                        <a href="/provider.php?slug=<?= e($p['slug']) ?>" class="btn btn--primary btn--block btn--sm">Get This Deal</a>
+                        <a href="<?= provider_url($p) ?>" class="btn btn--primary btn--block btn--sm">Get This Deal</a>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -129,7 +129,7 @@ require __DIR__ . '/includes/header.php';
         <div class="category-grid">
             <?php foreach ($categories as $cat):
                 $count = count(array_filter($providers, fn($p) => in_array($cat, $p['categories'], true))); ?>
-                <a class="category-card reveal" href="/providers.php?category=<?= e($cat) ?>">
+                <a class="category-card reveal" href="<?= url('providers', ['category' => $cat]) ?>">
                     <span class="category-card__icon"><?= $categoryIcons[$cat] ?? '🌐' ?></span>
                     <span class="category-card__name"><?= e($cat) ?> Hosting</span>
                     <span class="category-card__count"><?= $count ?> providers</span>
@@ -147,14 +147,14 @@ require __DIR__ . '/includes/header.php';
                 <h2>Featured hosting providers</h2>
                 <p>The highest-rated hosts in our directory, based on performance, support and value.</p>
             </div>
-            <a href="/providers.php" class="section-head__link">Browse all providers
+            <a href="<?= url('providers') ?>" class="section-head__link">Browse all providers
                 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
         </div>
 
         <div class="provider-grid">
             <?php foreach ($featured as $i => $p): ?>
-                <a href="/provider.php?slug=<?= e($p['slug']) ?>" class="provider-card reveal" style="transition-delay: <?= min($i * 50, 300) ?>ms">
+                <a href="<?= provider_url($p) ?>" class="provider-card reveal" style="transition-delay: <?= min($i * 50, 300) ?>ms">
                     <div class="provider-card__top">
                         <div class="provider-card__id">
                             <?= provider_badge($p, 'md') ?>
@@ -199,7 +199,7 @@ require __DIR__ . '/includes/header.php';
         <div class="cta-band reveal">
             <h2>Not sure which host is right for you?</h2>
             <p>Compare every provider side-by-side with our filterable directory — by category, country, rating and price.</p>
-            <a href="/providers.php" class="btn btn--primary">Explore All Providers</a>
+            <a href="<?= url('providers') ?>" class="btn btn--primary">Explore All Providers</a>
         </div>
     </div>
 </section>

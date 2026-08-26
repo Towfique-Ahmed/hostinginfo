@@ -3,9 +3,9 @@
 <footer class="site-footer">
     <div class="container footer-grid">
         <div class="footer-brand">
-            <a href="/index.php" class="brand">
+            <a href="<?= url('') ?>" class="brand">
                 <span class="brand__mark">🌐</span>
-                <span class="brand__text">Host<em>Radar</em></span>
+                <span class="brand__text">Hosting<em>Info</em></span>
             </a>
             <p>An independent directory helping you discover, compare, and choose hosting providers from every corner of the world.</p>
             <div class="footer-socials">
@@ -23,16 +23,16 @@
 
         <div class="footer-col">
             <h4>Explore</h4>
-            <a href="/index.php">Home</a>
-            <a href="/providers.php">All Providers</a>
-            <a href="/deals.php">Hosting Deals</a>
+            <a href="<?= url('') ?>">Home</a>
+            <a href="<?= url('providers') ?>">All Providers</a>
+            <a href="<?= url('deals') ?>">Hosting Deals</a>
         </div>
 
         <div class="footer-col">
             <h4>Categories</h4>
             <?php $cats = array_slice(get_all_categories(), 0, 5); ?>
             <?php foreach ($cats as $cat): ?>
-                <a href="/providers.php?category=<?= e($cat) ?>"><?= e($cat) ?> Hosting</a>
+                <a href="<?= url('providers', ['category' => $cat]) ?>"><?= e($cat) ?> Hosting</a>
             <?php endforeach; ?>
         </div>
 
@@ -48,7 +48,7 @@
     </div>
 
     <div class="container footer-bottom">
-        <p>&copy; <?= date('Y') ?> HostRadar. All provider names and logos are trademarks of their respective owners.</p>
+        <p>&copy; <?= date('Y') ?> HostingInfo. All provider names and logos are trademarks of their respective owners.</p>
         <p>Built for informational purposes — always verify current pricing on the provider's official site.</p>
     </div>
 </footer>

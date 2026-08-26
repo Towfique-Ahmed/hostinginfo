@@ -2,8 +2,6 @@
 declare(strict_types=1);
 require_once __DIR__ . '/includes/functions.php';
 
-$page_title = 'Hosting Deals & Coupon Codes | HostRadar';
-$page_description = 'Every live hosting discount and coupon code in the HostRadar directory, ranked by how much you save.';
 $active_nav = 'deals';
 
 $deals = get_deals_with_providers();
@@ -13,6 +11,9 @@ if ($deals) {
     $maxDiscount = max(array_column($deals, 'discount'));
     $avgDiscount = (int) round(array_sum(array_column($deals, 'discount')) / count($deals));
 }
+
+$page_title = 'Hosting Deals & Coupon Codes (Up to ' . $maxDiscount . '% Off) | HostingInfo';
+$page_description = 'Live hosting discounts and coupon codes from ' . count($deals) . '+ providers, ranked by savings — averaging ' . $avgDiscount . '% off. Updated regularly, verified against each provider.';
 
 require __DIR__ . '/includes/header.php';
 ?>
@@ -85,7 +86,7 @@ require __DIR__ . '/includes/header.php';
                             <div class="countdown__unit"><span class="countdown__num" data-unit="m">00</span><span class="countdown__label">Min</span></div>
                             <div class="countdown__unit"><span class="countdown__num" data-unit="s">00</span><span class="countdown__label">Sec</span></div>
                         </div>
-                        <a href="/provider.php?slug=<?= e($p['slug']) ?>" class="btn btn--primary btn--block btn--sm">Get This Deal</a>
+                        <a href="<?= provider_url($p) ?>" class="btn btn--primary btn--block btn--sm">Get This Deal</a>
                     </div>
                 </div>
             <?php endforeach; ?>

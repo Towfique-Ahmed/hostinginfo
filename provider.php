@@ -7,7 +7,9 @@ $provider = $slug !== '' ? get_provider_by_slug($slug) : null;
 
 if (!$provider) {
     http_response_code(404);
-    $page_title = 'Provider Not Found | HostRadar';
+    $page_title = 'Provider Not Found | HostingInfo';
+    $page_description = 'The hosting provider you are looking for could not be found. Browse the full HostingInfo directory instead.';
+    $robots = 'noindex, follow';
     $active_nav = 'providers';
     require __DIR__ . '/includes/header.php';
     ?>
@@ -15,7 +17,7 @@ if (!$provider) {
         <div class="container">
             <h1>404 — Provider Not Found</h1>
             <p>We couldn't find a hosting provider with that identifier.</p>
-            <a href="/providers.php" class="btn btn--primary">Browse All Providers</a>
+            <a href="<?= url('providers') ?>" class="btn btn--primary">Browse All Providers</a>
         </div>
     </section>
     <?php
@@ -23,8 +25,8 @@ if (!$provider) {
     exit;
 }
 
-$page_title = $provider['name'] . ' Review — Plans, Pricing & Deals | HostRadar';
-$page_description = $provider['tagline'];
+$page_title = $provider['name'] . ' Review (' . date('Y') . ') — Plans, Pricing & Deals | HostingInfo';
+$page_description = $provider['name'] . ': ' . $provider['tagline'] . ' Rated ' . number_format((float)$provider['rating'], 1) . '/5 from ' . number_format((int)$provider['reviews']) . '+ reviews, plans from ' . format_price((float)$provider['price']) . '/mo. Compare features, pricing and deals.';
 $active_nav = 'providers';
 
 $deals = get_deals_with_providers();
@@ -50,8 +52,8 @@ require __DIR__ . '/includes/header.php';
 <section class="provider-hero">
     <div class="container">
         <div class="breadcrumb">
-            <a href="/index.php">Home</a> <span>/</span>
-            <a href="/providers.php">Providers</a> <span>/</span>
+            <a href="<?= url('') ?>">Home</a> <span>/</span>
+            <a href="<?= url('providers') ?>">Providers</a> <span>/</span>
             <span><?= e($provider['name']) ?></span>
         </div>
 
@@ -74,7 +76,7 @@ require __DIR__ . '/includes/header.php';
                 </div>
                 <div class="provider-hero__actions">
                     <a href="#plans" class="btn btn--primary">View Plans from <?= format_price((float)$provider['price']) ?>/mo</a>
-                    <a href="/providers.php" class="btn btn--ghost">← Back to Directory</a>
+                    <a href="<?= url('providers') ?>" class="btn btn--ghost">← Back to Directory</a>
                 </div>
             </div>
         </div>
@@ -177,7 +179,7 @@ require __DIR__ . '/includes/header.php';
                     Copy
                 </button>
             </div>
-            <a href="/deals.php" class="btn btn--ghost btn--block btn--sm" style="margin-top:12px;">See All Deals</a>
+            <a href="<?= url('deals') ?>" class="btn btn--ghost btn--block btn--sm" style="margin-top:12px;">See All Deals</a>
         </div>
         <?php endif; ?>
 
@@ -186,7 +188,7 @@ require __DIR__ . '/includes/header.php';
             <h3>Similar Providers</h3>
             <div class="related-list">
                 <?php foreach ($related as $r): ?>
-                    <a href="/provider.php?slug=<?= e($r['slug']) ?>" class="related-item">
+                    <a href="<?= provider_url($r) ?>" class="related-item">
                         <?= provider_badge($r, 'sm') ?>
                         <div>
                             <div class="related-item__name"><?= e($r['name']) ?></div>

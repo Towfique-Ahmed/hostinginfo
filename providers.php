@@ -2,13 +2,14 @@
 declare(strict_types=1);
 require_once __DIR__ . '/includes/functions.php';
 
-$page_title = 'All Hosting Providers — Compare & Filter | HostRadar';
-$page_description = 'Browse and filter every hosting provider in the HostRadar directory by category, country, rating and price.';
 $active_nav = 'providers';
 
 $providers = get_providers();
 $categories = get_all_categories();
 $countries = get_all_countries();
+
+$page_title = 'All Hosting Providers (' . count($providers) . '+) — Compare Plans & Prices | HostingInfo';
+$page_description = 'Browse and filter ' . count($providers) . '+ hosting providers by category, country, rating and price. Find shared, VPS, cloud, WordPress and dedicated hosting in one directory.';
 
 $q = trim((string)($_GET['q'] ?? ''));
 $category = trim((string)($_GET['category'] ?? ''));
@@ -58,7 +59,7 @@ require __DIR__ . '/includes/header.php';
 
 <section class="section section--tight">
     <div class="container">
-        <form class="filter-bar" id="filterForm" method="get" action="/providers.php">
+        <form class="filter-bar" id="filterForm" method="get" action="<?= url('providers') ?>">
             <div class="filter-bar__row">
                 <div class="search-box">
                     <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
@@ -93,7 +94,7 @@ require __DIR__ . '/includes/header.php';
 
         <div class="provider-grid" id="providerGrid">
             <?php foreach ($filtered as $p): ?>
-                <a href="/provider.php?slug=<?= e($p['slug']) ?>" class="provider-card"
+                <a href="<?= provider_url($p) ?>" class="provider-card"
                    data-name="<?= e(mb_strtolower($p['name'])) ?>"
                    data-country="<?= e($p['country']) ?>"
                    data-categories="<?= e(implode(',', $p['categories'])) ?>"

@@ -167,8 +167,33 @@ function slugify_query(string $value): string
     return trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($value)) ?? '', '-');
 }
 
-function page_url(string $file, array $params = []): string
+/**
+ * Builds a site-relative URL for a top-level page, optionally with a query string.
+ * Pass '' for the homepage.
+ */
+function url(string $path = '', array $params = []): string
 {
+    $path = '/' . ltrim($path, '/');
     $query = http_build_query($params);
-    return $file . ($query ? '?' . $query : '');
+    return $path . ($query ? '?' . $query : '');
+}
+
+/**
+ * Builds the clean /provider/{slug} URL for a provider record or slug.
+ */
+function provider_url(array|string $provider): string
+{
+    $slug = is_array($provider) ? $provider['slug'] : $provider;
+    return '/provider/' . rawurlencode($slug);
+}
+
+/**
+ * Absolute canonical URL for the current request (scheme + host + path, no query string).
+ */
+function canonical_url(): string
+{
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $path = strtok($_SERVER['REQUEST_URI'] ?? '/', '?');
+    return $scheme . '://' . $host . $path;
 }
