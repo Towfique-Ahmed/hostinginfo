@@ -36,6 +36,13 @@
             <?php endforeach; ?>
         </div>
 
+        <div class="footer-col">
+            <h4>Company</h4>
+            <a href="<?= url('about') ?>">About Us</a>
+            <a href="<?= url('contact') ?>">Contact Us</a>
+            <a href="<?= url('privacy-policy') ?>">Privacy Policy</a>
+        </div>
+
         <div class="footer-col footer-col--newsletter">
             <h4>Stay in the loop</h4>
             <p>Get the best hosting deals dropped into your inbox. No spam, ever.</p>
@@ -48,7 +55,7 @@
     </div>
 
     <div class="container footer-bottom">
-        <p>&copy; <?= date('Y') ?> HostingInfo. All provider names and logos are trademarks of their respective owners.</p>
+        <p>&copy; <?= date('Y') ?> HostingInfo. All rights reserved by <a href="https://towfique.com" target="_blank" rel="noopener noreferrer">towfique.com</a>. All provider names and logos are trademarks of their respective owners.</p>
         <p>Built for informational purposes — always verify current pricing on the provider's official site.</p>
     </div>
 </footer>
