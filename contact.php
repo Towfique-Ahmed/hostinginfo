@@ -21,10 +21,10 @@ require __DIR__ . '/includes/header.php';
 <section class="section section--tight">
     <div class="container">
         <div class="contact-grid reveal">
-            <a class="contact-card" href="mailto:hello@hostinginfo.online">
+            <a class="contact-card" href="mailto:hello@towfique.com">
                 <span class="contact-card__icon">✉️</span>
                 <h3>Email us</h3>
-                <p>hello@hostinginfo.online</p>
+                <p>hello@towfique.com</p>
             </a>
             <div class="contact-card">
                 <span class="contact-card__icon">🛠️</span>
