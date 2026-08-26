@@ -44,7 +44,7 @@ if ($requestPath !== '' && $requestPath !== 'index.php') {
 }
 
 $page_title = 'HostingInfo — Compare Web Hosting Providers & Find the Best Hosting Deals';
-$page_description = 'Compare 35+ web hosting providers from around the world, read in-depth reviews, and grab the top 10 hosting deals and coupon codes — updated regularly.';
+$page_description = 'Compare 40+ web hosting providers from around the world, read in-depth reviews, and grab the top 10 hosting deals and coupon codes — updated regularly.';
 $active_nav = 'home';
 
 $providers = get_providers();
