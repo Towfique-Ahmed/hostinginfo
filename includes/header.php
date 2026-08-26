@@ -9,6 +9,7 @@ $robots = $robots ?? 'index, follow';
 ?><!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
+<meta name="google-site-verification" content="pyd7LfaT8PnVx-ikVWbTWmfSJkmvH1Mtl4AixvGcnAE" />
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-K9HE23EXS9"></script>
 <script>
