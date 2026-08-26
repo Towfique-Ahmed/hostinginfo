@@ -27,6 +27,18 @@ if ($requestPath === 'sitemap.xml') {
     require __DIR__ . '/sitemap.php';
     exit;
 }
+if ($requestPath === 'about') {
+    require __DIR__ . '/about.php';
+    exit;
+}
+if ($requestPath === 'contact') {
+    require __DIR__ . '/contact.php';
+    exit;
+}
+if ($requestPath === 'privacy-policy') {
+    require __DIR__ . '/privacy-policy.php';
+    exit;
+}
 if ($requestPath !== '' && $requestPath !== 'index.php') {
     render_not_found();
 }

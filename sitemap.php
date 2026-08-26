@@ -13,6 +13,9 @@ $urls = [
     ['loc' => $base . url(''), 'changefreq' => 'daily', 'priority' => '1.0'],
     ['loc' => $base . url('providers'), 'changefreq' => 'daily', 'priority' => '0.9'],
     ['loc' => $base . url('deals'), 'changefreq' => 'daily', 'priority' => '0.9'],
+    ['loc' => $base . url('about'), 'changefreq' => 'monthly', 'priority' => '0.4'],
+    ['loc' => $base . url('contact'), 'changefreq' => 'monthly', 'priority' => '0.4'],
+    ['loc' => $base . url('privacy-policy'), 'changefreq' => 'yearly', 'priority' => '0.2'],
 ];
 
 foreach (get_providers() as $provider) {
