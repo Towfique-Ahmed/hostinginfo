@@ -80,12 +80,6 @@ require __DIR__ . '/includes/header.php';
                                 Copy
                             </button>
                         </div>
-                        <div class="countdown" data-expires="<?= e($deal['expires']) ?>">
-                            <div class="countdown__unit"><span class="countdown__num" data-unit="d">00</span><span class="countdown__label">Days</span></div>
-                            <div class="countdown__unit"><span class="countdown__num" data-unit="h">00</span><span class="countdown__label">Hrs</span></div>
-                            <div class="countdown__unit"><span class="countdown__num" data-unit="m">00</span><span class="countdown__label">Min</span></div>
-                            <div class="countdown__unit"><span class="countdown__num" data-unit="s">00</span><span class="countdown__label">Sec</span></div>
-                        </div>
                         <a href="<?= provider_url($p) ?>" class="btn btn--primary btn--block btn--sm">Get This Deal</a>
                     </div>
                 </div>
