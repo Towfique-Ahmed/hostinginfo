@@ -6,23 +6,7 @@ $slug = trim((string)($_GET['slug'] ?? ''));
 $provider = $slug !== '' ? get_provider_by_slug($slug) : null;
 
 if (!$provider) {
-    http_response_code(404);
-    $page_title = 'Provider Not Found | HostingInfo';
-    $page_description = 'The hosting provider you are looking for could not be found. Browse the full HostingInfo directory instead.';
-    $robots = 'noindex, follow';
-    $active_nav = 'providers';
-    require __DIR__ . '/includes/header.php';
-    ?>
-    <section class="section" style="text-align:center; padding: 120px 0;">
-        <div class="container">
-            <h1>404 — Provider Not Found</h1>
-            <p>We couldn't find a hosting provider with that identifier.</p>
-            <a href="<?= url('providers') ?>" class="btn btn--primary">Browse All Providers</a>
-        </div>
-    </section>
-    <?php
-    require __DIR__ . '/includes/footer.php';
-    exit;
+    render_not_found('Provider Not Found', "We couldn't find a hosting provider with that identifier. Browse the full HostingInfo directory instead.");
 }
 
 $page_title = $provider['name'] . ' Review (' . date('Y') . ') — Plans, Pricing & Deals | HostingInfo';

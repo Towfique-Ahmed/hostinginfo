@@ -2,6 +2,35 @@
 declare(strict_types=1);
 require_once __DIR__ . '/includes/functions.php';
 
+/**
+ * Front-controller fallback: some hosts (e.g. xCloud's Nginx, tuned for WordPress-style
+ * "pretty permalinks") route every request that isn't a real file straight to index.php,
+ * bypassing .htaccess entirely. Dispatch on the request path so clean URLs still resolve
+ * even when that catch-all is the only routing the server does.
+ */
+$requestPath = current_path();
+
+if ($requestPath === 'providers') {
+    require __DIR__ . '/providers.php';
+    exit;
+}
+if ($requestPath === 'deals') {
+    require __DIR__ . '/deals.php';
+    exit;
+}
+if (preg_match('#^provider/([a-zA-Z0-9\-]+)$#', $requestPath, $m)) {
+    $_GET['slug'] = $m[1];
+    require __DIR__ . '/provider.php';
+    exit;
+}
+if ($requestPath === 'sitemap.xml') {
+    require __DIR__ . '/sitemap.php';
+    exit;
+}
+if ($requestPath !== '' && $requestPath !== 'index.php') {
+    render_not_found();
+}
+
 $page_title = 'HostingInfo — Compare Web Hosting Providers & Find the Best Hosting Deals';
 $page_description = 'Compare 35+ web hosting providers from around the world, read in-depth reviews, and grab the top 10 hosting deals and coupon codes — updated regularly.';
 $active_nav = 'home';

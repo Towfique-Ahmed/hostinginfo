@@ -197,3 +197,39 @@ function canonical_url(): string
     $path = strtok($_SERVER['REQUEST_URI'] ?? '/', '?');
     return $scheme . '://' . $host . $path;
 }
+
+/**
+ * Current request path with no leading/trailing slash or query string, e.g. 'provider/kinsta'.
+ */
+function current_path(): string
+{
+    $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
+    return trim($path, '/');
+}
+
+/**
+ * Renders the themed 404 page and stops execution. Shared by index.php's front-controller
+ * router (for unknown paths) and provider.php (for an unknown provider slug).
+ */
+function render_not_found(string $heading = 'Page Not Found', ?string $message = null): void
+{
+    $message = $message ?? 'The page you requested does not exist. Try the homepage or browse all providers.';
+    http_response_code(404);
+    $page_title = $heading . ' | HostingInfo';
+    $page_description = $message;
+    $robots = 'noindex, follow';
+    $active_nav = '';
+    require __DIR__ . '/header.php';
+    ?>
+    <section class="section" style="text-align:center; padding: 120px 0;">
+        <div class="container">
+            <h1>404 — <?= e($heading) ?></h1>
+            <p><?= e($message) ?></p>
+            <a href="<?= url('') ?>" class="btn btn--primary">Back to Home</a>
+            <a href="<?= url('providers') ?>" class="btn btn--ghost">Browse All Providers</a>
+        </div>
+    </section>
+    <?php
+    require __DIR__ . '/footer.php';
+    exit;
+}
