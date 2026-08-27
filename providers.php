@@ -8,11 +8,36 @@ $providers = get_providers();
 $categories = get_all_categories();
 $countries = get_all_countries();
 
-$page_title = 'All Hosting Providers (' . count($providers) . ') — Compare Plans & Prices | HostingInfo';
-$page_description = 'Compare ' . count($providers) . ' hosting providers in one sortable table: entry price, uptime, rating, country and category. Shared, VPS, cloud, WordPress and dedicated hosting.';
+/*
+ * Category pages live at /providers/{category}-hosting. The slug arrives either from
+ * the .htaccess rewrite or from index.php's front-controller fallback; an unknown slug
+ * is a 404 rather than a silently unfiltered listing. The old ?category=Cloud links are
+ * folded into the canonical path with a 301 so the two forms never both get indexed.
+ */
+$categorySlug = trim((string)($_GET['category_slug'] ?? ''));
+
+if ($categorySlug !== '') {
+    $category = category_from_slug($categorySlug);
+    if ($category === null) {
+        render_not_found(
+            'Category Not Found',
+            'There is no hosting category at that address. Browse the full directory instead.'
+        );
+    }
+} else {
+    $category = trim((string)($_GET['category'] ?? ''));
+    if ($category !== '' && in_array($category, get_all_categories(), true)) {
+        $carry = array_filter([
+            'q' => trim((string)($_GET['q'] ?? '')),
+            'country' => trim((string)($_GET['country'] ?? '')),
+            'sort' => trim((string)($_GET['sort'] ?? '')),
+        ], fn($v) => $v !== '');
+        redirect_permanent(category_url($category, $carry));
+    }
+    $category = '';
+}
 
 $q = trim((string)($_GET['q'] ?? ''));
-$category = trim((string)($_GET['category'] ?? ''));
 $country = trim((string)($_GET['country'] ?? ''));
 $sort = trim((string)($_GET['sort'] ?? 'rating'));
 
@@ -55,18 +80,41 @@ foreach (get_deals_with_providers() as $d) {
     $dealSlugs[$d['provider_slug']] = (int) $d['discount'];
 }
 
+$categoryCount = count($filtered);
+
+if ($category !== '') {
+    $label = $category . ' hosting';
+    $page_title = ucfirst($label) . ' — ' . $categoryCount . ' Providers Compared | HostingInfo';
+    $page_description = 'Compare ' . $categoryCount . ' ' . $label . ' providers side by side: entry price, uptime, rating and country, sorted however you need.';
+} else {
+    $page_title = 'All Hosting Providers (' . count($providers) . ') — Compare Plans & Prices | HostingInfo';
+    $page_description = 'Compare ' . count($providers) . ' hosting providers in one sortable table: entry price, uptime, rating, country and category. Shared, VPS, cloud, WordPress and dedicated hosting.';
+}
+
+$formAction = $category !== '' ? category_url($category) : url('providers');
+
 require __DIR__ . '/includes/header.php';
 ?>
 
 <div class="container">
 
     <section class="page-head">
-        <span class="kicker">The directory</span>
-        <h1>Every provider, <em>one table</em>.</h1>
-        <p class="lede">Sort <?= count($providers) ?> hosts by price, uptime, rating or age. Click any column heading to reorder; click a row to read the full profile.</p>
+        <?php if ($category !== ''): ?>
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="<?= url('') ?>">Home</a> <span>/</span>
+                <a href="<?= url('providers') ?>">Directory</a> <span>/</span>
+                <span><?= e($category) ?> hosting</span>
+            </nav>
+            <h1><?= e($category) ?> hosting, <em>compared</em>.</h1>
+            <p class="lede"><?= $categoryCount ?> <?= e($category) ?> host<?= $categoryCount === 1 ? '' : 's' ?> in the directory, sortable by price, uptime, rating or age. Click a row to read the full profile.</p>
+        <?php else: ?>
+            <span class="kicker">The directory</span>
+            <h1>Every provider, <em>one table</em>.</h1>
+            <p class="lede">Sort <?= count($providers) ?> hosts by price, uptime, rating or age. Click any column heading to reorder; click a row to read the full profile.</p>
+        <?php endif; ?>
     </section>
 
-    <form class="toolbar" id="filterForm" method="get" action="<?= url('providers') ?>">
+    <form class="toolbar" id="filterForm" method="get" action="<?= e($formAction) ?>">
         <label class="field">
             <span class="visually-hidden">Search providers</span>
             <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
@@ -88,15 +136,14 @@ require __DIR__ . '/includes/header.php';
             </select>
         </div>
         <noscript><button type="submit" class="btn btn--primary btn--sm">Apply</button></noscript>
-        <input type="hidden" name="category" id="categoryInput" value="<?= e($category) ?>">
     </form>
 
-    <div class="chip-row" id="categoryTags">
-        <button type="button" class="chip <?= $category === '' ? 'is-active' : '' ?>" data-category="">All</button>
+    <nav class="chip-row" aria-label="Hosting categories">
+        <a class="chip <?= $category === '' ? 'is-active' : '' ?>" href="<?= url('providers') ?>">All</a>
         <?php foreach ($categories as $cat): ?>
-            <button type="button" class="chip <?= $category === $cat ? 'is-active' : '' ?>" data-category="<?= e($cat) ?>"><?= e($cat) ?></button>
+            <a class="chip <?= $category === $cat ? 'is-active' : '' ?>" href="<?= e(category_url($cat)) ?>"><?= e($cat) ?></a>
         <?php endforeach; ?>
-    </div>
+    </nav>
 
     <div class="results-bar">
         <span class="kicker" id="resultsCount"><?= count($filtered) ?> provider<?= count($filtered) === 1 ? '' : 's' ?></span>

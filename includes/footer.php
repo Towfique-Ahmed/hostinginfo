@@ -27,7 +27,7 @@
             <div class="footer-col">
                 <h4>Categories</h4>
                 <?php foreach (array_slice(get_all_categories(), 0, 5) as $cat): ?>
-                    <a href="<?= url('providers', ['category' => $cat]) ?>"><?= e($cat) ?> hosting</a>
+                    <a href="<?= e(category_url($cat)) ?>"><?= e($cat) ?> hosting</a>
                 <?php endforeach; ?>
             </div>
 

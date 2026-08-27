@@ -18,6 +18,11 @@ if ($requestPath === 'deals') {
     require __DIR__ . '/deals.php';
     exit;
 }
+if (preg_match('#^providers/([a-zA-Z0-9\-]+)$#', $requestPath, $m)) {
+    $_GET['category_slug'] = $m[1];
+    require __DIR__ . '/providers.php';
+    exit;
+}
 if (preg_match('#^provider/([a-zA-Z0-9\-]+)$#', $requestPath, $m)) {
     $_GET['slug'] = $m[1];
     require __DIR__ . '/provider.php';
@@ -196,7 +201,7 @@ require __DIR__ . '/includes/header.php';
         <div class="cat-index reveal">
             <?php foreach ($categories as $cat):
                 $count = count(array_filter($providers, fn($p) => in_array($cat, $p['categories'], true))); ?>
-                <a href="<?= url('providers', ['category' => $cat]) ?>">
+                <a href="<?= e(category_url($cat)) ?>">
                     <?= category_icon($cat) ?>
                     <span class="cat-index__name"><?= e($cat) ?></span>
                     <span class="cat-index__count"><?= $count ?></span>

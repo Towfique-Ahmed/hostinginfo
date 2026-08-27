@@ -118,8 +118,6 @@
         var searchInput = document.getElementById('searchInput');
         var countryFilter = document.getElementById('countryFilter');
         var sortFilter = document.getElementById('sortFilter');
-        var categoryTags = document.getElementById('categoryTags');
-        var categoryInput = document.getElementById('categoryInput');
         var resultsCount = document.getElementById('resultsCount');
         var emptyState = document.getElementById('emptyState');
         var tableWrap = table ? table.parentNode : null;
@@ -128,7 +126,6 @@
         var state = {
             q: ((searchInput && searchInput.value) || '').toLowerCase(),
             country: (countryFilter && countryFilter.value) || '',
-            category: (categoryInput && categoryInput.value) || '',
             sort: (sortFilter && sortFilter.value) || 'rating'
         };
 
@@ -159,8 +156,7 @@
                     d.country.toLowerCase().indexOf(state.q) !== -1 ||
                     d.categories.toLowerCase().indexOf(state.q) !== -1;
                 var matchesCountry = !state.country || d.country === state.country;
-                var matchesCategory = !state.category || d.categories.split(',').indexOf(state.category) !== -1;
-                var show = matchesQ && matchesCountry && matchesCategory;
+                var show = matchesQ && matchesCountry;
                 row.hidden = !show;
                 if (show) visible.push(row);
             });
@@ -206,18 +202,6 @@
                 applyFilters();
             });
         }
-        if (categoryTags) {
-            categoryTags.addEventListener('click', function (evt) {
-                var chip = evt.target.closest('.chip');
-                if (!chip) return;
-                categoryTags.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('is-active'); });
-                chip.classList.add('is-active');
-                state.category = chip.getAttribute('data-category') || '';
-                if (categoryInput) categoryInput.value = state.category;
-                applyFilters();
-            });
-        }
-
         /* Column headings double as sort controls. */
         if (table) {
             table.querySelectorAll('th[data-sort]').forEach(function (th) {

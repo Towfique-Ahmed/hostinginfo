@@ -240,6 +240,49 @@ function url(string $path = '', array $params = []): string
 }
 
 /**
+ * URL slug for a hosting category: 'Cloud' -> 'cloud-hosting', 'VPS' -> 'vps-hosting'.
+ */
+function category_slug(string $category): string
+{
+    return slugify_query($category) . '-hosting';
+}
+
+/**
+ * Resolves a category slug back to its canonical category name, or null if it
+ * matches no known category. Comparison goes through category_slug() so the two
+ * directions can never drift apart.
+ */
+function category_from_slug(string $slug): ?string
+{
+    $slug = strtolower(trim($slug, '/'));
+    foreach (get_all_categories() as $category) {
+        if (category_slug($category) === $slug) {
+            return $category;
+        }
+    }
+    return null;
+}
+
+/**
+ * Builds the clean /providers/{category}-hosting URL, optionally with a query string.
+ */
+function category_url(string $category, array $params = []): string
+{
+    $query = http_build_query($params);
+    return '/providers/' . category_slug($category) . ($query ? '?' . $query : '');
+}
+
+/**
+ * Sends a permanent redirect and stops. Used to fold the old ?category= links
+ * into their canonical path form.
+ */
+function redirect_permanent(string $location): void
+{
+    header('Location: ' . $location, true, 301);
+    exit;
+}
+
+/**
  * Builds the clean /provider/{slug} URL for a provider record or slug.
  */
 function provider_url(array|string $provider): string
