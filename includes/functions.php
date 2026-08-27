@@ -101,57 +101,118 @@ function e(?string $value): string
     return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
 }
 
-function star_rating_html(float $rating): string
-{
-    $full = (int) floor($rating);
-    $half = ($rating - $full) >= 0.25 && ($rating - $full) < 0.75;
-    if (($rating - $full) >= 0.75) {
-        $full++;
-    }
-    $empty = 5 - $full - ($half ? 1 : 0);
-
-    $html = '<span class="stars" aria-label="' . e((string) $rating) . ' out of 5 stars">';
-    for ($i = 0; $i < $full; $i++) {
-        $html .= '<svg viewBox="0 0 24 24" class="star star--full"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>';
-    }
-    if ($half) {
-        $html .= '<svg viewBox="0 0 24 24" class="star star--half"><defs><linearGradient id="half-' . uniqid() . '" x1="0" x2="1"><stop offset="50%" stop-color="currentColor"/><stop offset="50%" stop-color="transparent"/></linearGradient></defs><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" fill="url(#half-' . uniqid() . ')" stroke="currentColor"/></svg>';
-    }
-    for ($i = 0; $i < $empty; $i++) {
-        $html .= '<svg viewBox="0 0 24 24" class="star star--empty"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>';
-    }
-    $html .= '</span>';
-    return $html;
-}
-
 function initials(string $name): string
 {
-    $words = preg_split('/[\s\-\(\)]+/', $name, -1, PREG_SPLIT_NO_EMPTY);
+    $words = preg_split('/[\s\-\(\)\.]+/', $name, -1, PREG_SPLIT_NO_EMPTY);
     $words = array_slice($words, 0, 2);
     $letters = array_map(fn($w) => mb_strtoupper(mb_substr($w, 0, 1)), $words);
     return implode('', $letters);
 }
 
 /**
- * Renders a self-contained gradient badge (no external image dependency).
+ * @return array{0:int,1:int,2:int} RGB channels for a #rrggbb string.
+ */
+function hex_to_rgb(string $hex): array
+{
+    $hex = ltrim($hex, '#');
+    if (strlen($hex) === 3) {
+        $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+    }
+    return [
+        (int) hexdec(substr($hex, 0, 2)),
+        (int) hexdec(substr($hex, 2, 2)),
+        (int) hexdec(substr($hex, 4, 2)),
+    ];
+}
+
+/**
+ * Relative luminance (0 = black, 1 = white), used to keep brand colours legible
+ * once they sit on the site's own ink or paper background.
+ */
+function rgb_luminance(array $rgb): float
+{
+    return (0.2126 * $rgb[0] + 0.7152 * $rgb[1] + 0.0722 * $rgb[2]) / 255;
+}
+
+/**
+ * Mixes a colour toward white or black until it clears a luminance floor/ceiling,
+ * so a navy brand colour stays readable on ink and a yellow one stays readable on paper.
+ */
+function brand_variant(array $rgb, bool $forDark): string
+{
+    $target = $forDark ? [255, 255, 255] : [0, 0, 0];
+    $lum = rgb_luminance($rgb);
+    $needed = $forDark ? 0.5 : 0.28;
+
+    for ($step = 0; $step < 10; $step++) {
+        $ok = $forDark ? ($lum >= $needed) : ($lum <= $needed);
+        if ($ok) {
+            break;
+        }
+        $rgb = [
+            (int) round($rgb[0] + ($target[0] - $rgb[0]) * 0.18),
+            (int) round($rgb[1] + ($target[1] - $rgb[1]) * 0.18),
+            (int) round($rgb[2] + ($target[2] - $rgb[2]) * 0.18),
+        ];
+        $lum = rgb_luminance($rgb);
+    }
+
+    return sprintf('#%02x%02x%02x', $rgb[0], $rgb[1], $rgb[2]);
+}
+
+/**
+ * Flat identity tile: the provider's initials set in monospace, tinted with its own
+ * brand colour. Replaces the old gradient SVG badge — no image dependency, and it
+ * reads as a data point rather than an app icon.
  */
 function provider_badge(array $provider, string $size = 'md'): string
 {
-    $sizeClass = 'badge--' . $size;
-    $c1 = e($provider['color1']);
-    $c2 = e($provider['color2']);
-    $letters = e(initials($provider['name']));
-    $gradId = 'grad-' . e($provider['slug']) . '-' . $size;
-    return '<span class="provider-badge ' . $sizeClass . '" style="--c1:' . $c1 . ';--c2:' . $c2 . '">
-        <svg viewBox="0 0 64 64" role="img" aria-label="' . e($provider['name']) . ' logo">
-            <defs><linearGradient id="' . $gradId . '" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="' . $c1 . '"/>
-                <stop offset="100%" stop-color="' . $c2 . '"/>
-            </linearGradient></defs>
-            <rect width="64" height="64" rx="18" fill="url(#' . $gradId . ')"/>
-            <text x="32" y="40" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="24" fill="#fff">' . $letters . '</text>
-        </svg>
-    </span>';
+    $rgb = hex_to_rgb((string) $provider['color1']);
+    $style = sprintf(
+        '--brand-rgb:%d,%d,%d;--brand-on-dark:%s;--brand-on-light:%s',
+        $rgb[0], $rgb[1], $rgb[2],
+        brand_variant($rgb, true),
+        brand_variant($rgb, false)
+    );
+
+    return '<span class="logo-tile logo-tile--' . e($size) . '" style="' . e($style) . '" aria-hidden="true">'
+        . e(initials((string) $provider['name']))
+        . '</span>';
+}
+
+/**
+ * Line-art glyph for a hosting category. Drawn rather than emoji, so the set stays
+ * visually consistent and inherits the current text colour.
+ */
+function category_icon(string $category): string
+{
+    $paths = [
+        'Shared'    => '<rect x="3" y="4" width="18" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/>',
+        'WordPress' => '<circle cx="12" cy="12" r="9"/><path d="M4 9h16M7.5 9l3 9 3-9M14 18l3-9"/>',
+        'VPS'       => '<rect x="3" y="4" width="18" height="7" rx="1.5"/><rect x="3" y="13" width="18" height="7" rx="1.5"/><path d="M7 7.5h.01M7 16.5h.01"/>',
+        'Cloud'     => '<path d="M7 18h10a4 4 0 0 0 .6-7.96A6 6 0 0 0 6 9.5 4.25 4.25 0 0 0 7 18z"/>',
+        'Dedicated' => '<rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 7h8M8 11h8M8 15h4"/>',
+        'Reseller'  => '<path d="M4 8h16l-1.5 12H5.5L4 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
+        'Managed'   => '<path d="M12 3l7.5 3.5v5c0 4.5-3 8-7.5 9.5C7.5 19.5 4.5 16 4.5 11.5v-5L12 3z"/><path d="M9.5 12l1.8 1.8 3.5-3.6"/>',
+    ];
+    $body = $paths[$category] ?? '<circle cx="12" cy="12" r="9"/>';
+
+    return '<svg viewBox="0 0 24 24" aria-hidden="true" stroke-linecap="round" stroke-linejoin="round">' . $body . '</svg>';
+}
+
+/**
+ * Rating as a number plus a proportional bar. A five-dot meter rounds every provider
+ * in a 4.3-4.9 band to "five dots"; a bar shows the difference that actually exists.
+ */
+function rating_meter(float $rating): string
+{
+    $pct = max(0, min(100, ($rating / 5) * 100));
+
+    return '<span class="rating">'
+        . '<span class="rating__num">' . number_format($rating, 1) . '</span>'
+        . '<span class="meter" role="img" aria-label="' . e(number_format($rating, 1)) . ' out of 5">'
+        . '<i style="width:' . round($pct, 1) . '%"></i>'
+        . '</span></span>';
 }
 
 function format_price(float $price): string
@@ -221,14 +282,17 @@ function render_not_found(string $heading = 'Page Not Found', ?string $message =
     $active_nav = '';
     require __DIR__ . '/header.php';
     ?>
-    <section class="section" style="text-align:center; padding: 120px 0;">
-        <div class="container">
-            <h1>404 — <?= e($heading) ?></h1>
-            <p><?= e($message) ?></p>
-            <a href="<?= url('') ?>" class="btn btn--primary">Back to Home</a>
-            <a href="<?= url('providers') ?>" class="btn btn--ghost">Browse All Providers</a>
-        </div>
-    </section>
+    <div class="container">
+        <section class="page-head">
+            <span class="kicker">Error 404</span>
+            <h1><?= e($heading) ?></h1>
+            <p class="lede"><?= e($message) ?></p>
+            <div class="provider-head__actions">
+                <a href="<?= url('providers') ?>" class="btn btn--primary">Browse the directory</a>
+                <a href="<?= url('') ?>" class="btn">Back to home</a>
+            </div>
+        </section>
+    </div>
     <?php
     require __DIR__ . '/footer.php';
     exit;

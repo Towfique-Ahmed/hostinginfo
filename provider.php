@@ -30,161 +30,181 @@ $related = array_filter(get_providers(), function ($p) use ($provider) {
 });
 $related = array_slice(array_values($related), 0, 4);
 
+$cheapestPlan = $provider['plans'] ? min(array_column($provider['plans'], 'price')) : (float) $provider['price'];
+
 require __DIR__ . '/includes/header.php';
 ?>
 
-<section class="provider-hero">
-    <div class="container">
-        <div class="breadcrumb">
-            <a href="<?= url('') ?>">Home</a> <span>/</span>
-            <a href="<?= url('providers') ?>">Providers</a> <span>/</span>
-            <span><?= e($provider['name']) ?></span>
-        </div>
+<div class="container">
 
-        <div class="provider-hero__grid">
+    <section class="provider-head">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="<?= url('') ?>">Home</a> <span>/</span>
+            <a href="<?= url('providers') ?>">Directory</a> <span>/</span>
+            <span><?= e($provider['name']) ?></span>
+        </nav>
+
+        <div class="provider-head__row">
             <?= provider_badge($provider, 'lg') ?>
-            <div class="provider-hero__info">
+            <div class="provider-head__text">
                 <h1><?= e($provider['name']) ?></h1>
-                <p><?= e($provider['tagline']) ?></p>
-                <div class="provider-hero__badges">
-                    <span class="badge-pill"><?= $provider['flag'] ?> <?= e($provider['country']) ?></span>
-                    <span class="badge-pill">📅 Founded <?= (int)$provider['founded'] ?></span>
-                    <span class="badge-pill">⏱ <?= number_format((float)$provider['uptime'], 2) ?>% Uptime</span>
-                    <?php foreach ($provider['categories'] as $cat): ?>
-                        <span class="badge-pill"><?= e($cat) ?></span>
+                <p class="provider-head__line"><?= e($provider['tagline']) ?></p>
+
+                <div class="provider-head__meta">
+                    <?= rating_meter((float)$provider['rating']) ?>
+                    <span class="num" style="color:var(--fg-faint)"><?= number_format((int)$provider['reviews']) ?> reviews</span>
+                    <span class="sep">|</span>
+                    <span><?= e($provider['country']) ?></span>
+                    <span class="sep">|</span>
+                    <span>Est. <span class="num"><?= (int)$provider['founded'] ?></span></span>
+                    <span class="sep">|</span>
+                    <span><span class="num"><?= number_format((float)$provider['uptime'], 2) ?>%</span> uptime</span>
+                    <span class="sep">|</span>
+                    <span><?= e(implode(', ', $provider['categories'])) ?></span>
+                </div>
+
+                <div class="provider-head__actions">
+                    <a href="#plans" class="btn btn--primary">Plans from <?= format_price((float)$cheapestPlan) ?>/mo</a>
+                    <?php if ($providerDeal): ?>
+                        <a href="#deal" class="btn"><?= (int)$providerDeal['discount'] ?>% off with a code</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="detail-layout">
+        <div class="detail-main">
+
+            <section class="detail-block">
+                <h2>The verdict</h2>
+                <p><?= e($provider['description']) ?></p>
+            </section>
+
+            <section class="detail-block">
+                <h2>What you get</h2>
+                <ul class="feature-list">
+                    <?php foreach ($provider['features'] as $feature): ?>
+                        <li><?= e($feature) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </section>
+
+            <section class="detail-block" id="plans">
+                <h2>Plans &amp; pricing</h2>
+                <div class="plan-grid">
+                    <?php foreach ($provider['plans'] as $plan): ?>
+                        <div class="plan">
+                            <div class="plan__name"><?= e($plan['name']) ?></div>
+                            <div class="plan__price"><?= format_price((float)$plan['price']) ?><span>/<?= e($plan['period']) ?></span></div>
+                            <ul>
+                                <?php foreach ($plan['features'] as $f): ?>
+                                    <li><?= e($f) ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
                     <?php endforeach; ?>
                 </div>
-                <div><?= star_rating_html((float)$provider['rating']) ?>
-                    <span class="rating-num"><?= number_format((float)$provider['rating'], 1) ?>/5</span>
-                    <span style="color:var(--text-dimmer); font-size:0.85rem;"> · <?= number_format((int)$provider['reviews']) ?> reviews</span>
-                </div>
-                <div class="provider-hero__actions">
-                    <a href="#plans" class="btn btn--primary">View Plans from <?= format_price((float)$provider['price']) ?>/mo</a>
-                    <a href="<?= url('providers') ?>" class="btn btn--ghost">← Back to Directory</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+            </section>
 
-<div class="container">
-<div class="detail-layout">
-    <div class="detail-main">
-
-        <div class="detail-block">
-            <h2>About <?= e($provider['name']) ?></h2>
-            <p><?= e($provider['description']) ?></p>
-        </div>
-
-        <div class="detail-block">
-            <h2>Key Features</h2>
-            <ul class="feature-list">
-                <?php foreach ($provider['features'] as $feature): ?>
-                    <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> <?= e($feature) ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-
-        <div class="detail-block" id="plans">
-            <h2>Plans &amp; Pricing</h2>
-            <div class="plans-grid">
-                <?php foreach ($provider['plans'] as $plan): ?>
-                    <div class="plan-card">
-                        <div class="plan-card__name"><?= e($plan['name']) ?></div>
-                        <div class="plan-card__price"><?= format_price((float)$plan['price']) ?><span>/<?= e($plan['period']) ?></span></div>
+            <section class="detail-block">
+                <h2>The trade-off</h2>
+                <div class="pc-grid">
+                    <div class="pc pc--pro">
+                        <h3>In its favour</h3>
                         <ul>
-                            <?php foreach ($plan['features'] as $f): ?>
-                                <li><?= e($f) ?></li>
+                            <?php foreach ($provider['pros'] as $pro): ?>
+                                <li><?= e($pro) ?></li>
                             <?php endforeach; ?>
                         </ul>
-                        <a href="#" class="btn btn--ghost btn--block btn--sm" onclick="return false;">Select Plan</a>
                     </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-
-        <div class="detail-block">
-            <h2>Pros &amp; Cons</h2>
-            <div class="pros-cons-grid">
-                <div class="pc-card pc-card--pros">
-                    <h3>👍 What we like</h3>
-                    <ul>
-                        <?php foreach ($provider['pros'] as $pro): ?>
-                            <li>✅ <?= e($pro) ?></li>
-                        <?php endforeach; ?>
-                    </ul>
+                    <div class="pc pc--con">
+                        <h3>Worth knowing</h3>
+                        <ul>
+                            <?php foreach ($provider['cons'] as $con): ?>
+                                <li><?= e($con) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
                 </div>
-                <div class="pc-card pc-card--cons">
-                    <h3>👎 Worth noting</h3>
-                    <ul>
-                        <?php foreach ($provider['cons'] as $con): ?>
-                            <li>⚠️ <?= e($con) ?></li>
-                        <?php endforeach; ?>
-                    </ul>
+            </section>
+
+            <?php if (!empty($provider['faqs'])): ?>
+            <section class="detail-block">
+                <h2>Common questions</h2>
+                <div class="faq">
+                    <?php foreach ($provider['faqs'] as $faq): ?>
+                        <details>
+                            <summary><?= e($faq['q']) ?></summary>
+                            <p><?= e($faq['a']) ?></p>
+                        </details>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+            <?php endif; ?>
+
+        </div>
+
+        <aside class="rail">
+            <div class="rail__card">
+                <h3>At a glance</h3>
+                <div class="spec-block">
+                    <div class="spec-row">
+                        <span class="spec-row__label">Rating</span>
+                        <span class="spec-row__value"><?= number_format((float)$provider['rating'], 1) ?><small>/5</small></span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-row__label">Uptime</span>
+                        <span class="spec-row__value"><?= number_format((float)$provider['uptime'], 2) ?><small>%</small></span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-row__label">From</span>
+                        <span class="spec-row__value"><?= format_price((float)$provider['price']) ?><small>/mo</small></span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-row__label">Founded</span>
+                        <span class="spec-row__value"><?= (int)$provider['founded'] ?></span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-row__label">Base</span>
+                        <span class="spec-row__value" style="font-size:0.85rem"><?= e($provider['country']) ?></span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <?php if (!empty($provider['faqs'])): ?>
-        <div class="detail-block">
-            <h2>Frequently Asked Questions</h2>
-            <div class="faq-list">
-                <?php foreach ($provider['faqs'] as $faq): ?>
-                    <details class="faq-item">
-                        <summary><?= e($faq['q']) ?></summary>
-                        <p><?= e($faq['a']) ?></p>
-                    </details>
-                <?php endforeach; ?>
+            <?php if ($providerDeal): ?>
+            <div class="rail__card rail__card--deal" id="deal">
+                <h3><?= (int)$providerDeal['discount'] ?>% off — active code</h3>
+                <p class="rail__deal-title"><?= e($providerDeal['title']) ?></p>
+                <div class="coupon" style="width:100%; justify-content:space-between">
+                    <code><?= e($providerDeal['coupon']) ?></code>
+                    <button type="button" class="copy-btn" data-copy="<?= e($providerDeal['coupon']) ?>">
+                        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                        Copy
+                    </button>
+                </div>
             </div>
-        </div>
-        <?php endif; ?>
+            <?php endif; ?>
 
+            <?php if ($related): ?>
+            <div class="rail__card">
+                <h3>Similar hosts</h3>
+                <div class="related">
+                    <?php foreach ($related as $r): ?>
+                        <a href="<?= provider_url($r) ?>">
+                            <?= provider_badge($r, 'sm') ?>
+                            <div>
+                                <div class="related__name"><?= e($r['name']) ?></div>
+                                <div class="related__meta"><?= number_format((float)$r['rating'], 1) ?> · <?= format_price((float)$r['price']) ?>/mo</div>
+                            </div>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+        </aside>
     </div>
 
-    <aside class="detail-sidebar">
-        <div class="sidebar-card">
-            <h3>Quick Facts</h3>
-            <div class="fact-row"><span>Headquarters</span><span><?= $provider['flag'] ?> <?= e($provider['country']) ?></span></div>
-            <div class="fact-row"><span>Founded</span><span><?= (int)$provider['founded'] ?></span></div>
-            <div class="fact-row"><span>Uptime</span><span><?= number_format((float)$provider['uptime'], 2) ?>%</span></div>
-            <div class="fact-row"><span>Starting Price</span><span><?= format_price((float)$provider['price']) ?>/mo</span></div>
-            <div class="fact-row"><span>Rating</span><span><?= number_format((float)$provider['rating'], 1) ?> / 5</span></div>
-            <a href="#plans" class="btn btn--primary btn--block" style="margin-top:16px;">View Plans</a>
-        </div>
-
-        <?php if ($providerDeal): ?>
-        <div class="sidebar-card">
-            <h3>🔥 Active Deal</h3>
-            <p style="font-size:0.88rem;"><?= e($providerDeal['title']) ?></p>
-            <div class="coupon-row">
-                <code><?= e($providerDeal['coupon']) ?></code>
-                <button type="button" class="copy-btn" data-copy="<?= e($providerDeal['coupon']) ?>">
-                    <svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-                    Copy
-                </button>
-            </div>
-            <a href="<?= url('deals') ?>" class="btn btn--ghost btn--block btn--sm" style="margin-top:12px;">See All Deals</a>
-        </div>
-        <?php endif; ?>
-
-        <?php if ($related): ?>
-        <div class="sidebar-card">
-            <h3>Similar Providers</h3>
-            <div class="related-list">
-                <?php foreach ($related as $r): ?>
-                    <a href="<?= provider_url($r) ?>" class="related-item">
-                        <?= provider_badge($r, 'sm') ?>
-                        <div>
-                            <div class="related-item__name"><?= e($r['name']) ?></div>
-                            <div class="related-item__meta"><?= $r['flag'] ?> <?= e($r['country']) ?> · ⭐ <?= number_format((float)$r['rating'], 1) ?></div>
-                        </div>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-        </div>
-        <?php endif; ?>
-    </aside>
-</div>
 </div>
 
 <?php require __DIR__ . '/includes/footer.php'; ?>
