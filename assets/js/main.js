@@ -11,13 +11,10 @@
     }
 
     (function initTheme() {
+        /* Dark is the default experience; only an explicit user choice overrides it. */
         var saved = null;
         try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
-        if (saved) {
-            applyTheme(saved);
-        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-            applyTheme('light');
-        }
+        applyTheme(saved === 'light' ? 'light' : 'dark');
     })();
 
     if (themeToggle) {
