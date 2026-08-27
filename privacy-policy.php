@@ -10,20 +10,18 @@ $page_description = 'Read the HostingInfo privacy policy to understand what info
 require __DIR__ . '/includes/header.php';
 ?>
 
-<section class="hero">
-    <div class="container">
-        <span class="hero__eyebrow"><span class="dot"></span> Legal</span>
-        <h1>Privacy <span class="gradient-text">Policy</span></h1>
-        <p class="lead">This policy explains what information HostingInfo collects and how it is used.</p>
-    </div>
-</section>
+<div class="container container--narrow">
 
-<section class="section section--tight">
-    <div class="container">
-        <div class="legal-content reveal">
-            <p class="legal-updated">Last updated: <?= date('F j, Y') ?></p>
+    <section class="page-head">
+        <span class="kicker">Legal</span>
+        <h1>Privacy <em>policy</em>.</h1>
+        <p class="lede">What HostingInfo collects, and what it does with it.</p>
+    </section>
 
-            <h2>Information we collect</h2>
+    <article class="prose">
+        <p class="kicker">Last updated <?= date('j F Y') ?></p>
+
+        <h2>Information we collect</h2>
             <p>We collect limited information automatically when you visit HostingInfo, such as pages viewed, browser type, and general usage patterns, typically through standard analytics tools. If you subscribe to our newsletter, we collect the email address you provide.</p>
 
             <h2>How we use information</h2>
@@ -47,8 +45,8 @@ require __DIR__ . '/includes/header.php';
 
             <h2>Changes to this policy</h2>
             <p>We may update this privacy policy from time to time. Changes will be posted on this page with an updated revision date.</p>
-        </div>
-    </div>
-</section>
+    </article>
+
+</div>
 
 <?php require __DIR__ . '/includes/footer.php'; ?>
