@@ -18,6 +18,10 @@ $urls = [
     ['loc' => $base . url('privacy-policy'), 'changefreq' => 'yearly', 'priority' => '0.2'],
 ];
 
+foreach (get_all_categories() as $category) {
+    $urls[] = ['loc' => $base . category_url($category), 'changefreq' => 'weekly', 'priority' => '0.7'];
+}
+
 foreach (get_providers() as $provider) {
     $urls[] = ['loc' => $base . provider_url($provider), 'changefreq' => 'weekly', 'priority' => '0.8'];
 }
