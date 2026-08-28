@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/includes/legacy_redirects.php';
 
 /**
  * Front-controller fallback: some hosts (e.g. xCloud's Nginx, tuned for WordPress-style
@@ -9,6 +10,9 @@ require_once __DIR__ . '/includes/functions.php';
  * even when that catch-all is the only routing the server does.
  */
 $requestPath = current_path();
+
+// Retired blog posts still in Google's index: 301 them to the homepage.
+redirect_legacy_blog_url($requestPath);
 
 if ($requestPath === 'providers') {
     require __DIR__ . '/providers.php';
