@@ -747,6 +747,26 @@ tr:hover .cell-go svg { stroke: var(--signal); transform: translateX(3px); }
 .prose li { font-size: 0.96rem; color: var(--fg-muted); padding: 5px 0 5px 18px; position: relative; }
 .prose li::before { content: "—"; position: absolute; left: 0; color: var(--signal); }
 
+.team { max-width: var(--measure); padding: 8px 0 40px; }
+.team__title { font-size: 1.35rem; margin: 8px 0 24px; }
+.team__member { display: flex; gap: 22px; align-items: flex-start; background: var(--ink); padding: 26px; box-shadow: 0 0 0 1px var(--rule); }
+.team__avatar {
+    flex: 0 0 56px; width: 56px; height: 56px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--rule-strong); border-radius: 50%;
+    font-family: var(--font-mono); font-size: 0.9rem; letter-spacing: 0.04em;
+    color: var(--signal);
+}
+.team__body h3 { font-size: 1.05rem; margin: 0 0 2px; }
+.team__role { font-family: var(--font-mono); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-faint); margin: 0 0 14px; }
+.team__body p { font-size: 0.94rem; line-height: 1.7; color: var(--fg-muted); margin: 0 0 12px; }
+.team__links { margin: 0; }
+.team__links a { color: var(--signal); border-bottom: 1px solid currentColor; }
+
+@media (max-width: 640px) {
+    .team__member { flex-direction: column; gap: 16px; padding: 20px; }
+}
+
 .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1px; }
 .contact-card { background: var(--ink); padding: 24px; box-shadow: 0 0 0 1px var(--rule); transition: background-color 0.15s ease; }
 a.contact-card:hover { background: var(--ink-raised); }
