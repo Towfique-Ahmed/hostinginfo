@@ -7,6 +7,9 @@ DirectoryIndex index.php
 RewriteEngine On
 RewriteBase /
 
+# 0) Retired blog posts still indexed by Google: 301 them to the homepage.
+RewriteRule ^(cloudways-vs-wp-engine|kinsta-review|hostinger-review|best-siteground-alternatives|best-rapyd-cloud-alternatives|best-hosting-com-alternatives|best-hostinger-alternatives|best-kinsta-alternatives|best-liquid-web-alternatives|best-wp-engine-alternatives|best-nodejs-hosting-providers|best-laravel-hosting-providers|best-cloudways-alternatives|best-openclaw-hosting-providers|cloudways-review|dreamhost-review|rapyd-cloud-review|best-website-builders|xcloud-hosting-review|kinsta-vs-siteground|liquid-web-review|wp-engine-review|hosting-com-review|wp-engine-vs-kinsta|best-black-friday-web-hosting-deals|siteground-review|best-dreamhost-alternatives)/?$ / [R=301,L,NC]
+
 # 1) Canonicalize old query-string provider links: /provider.php?slug=X -> /provider/X
 RewriteCond %{THE_REQUEST} \s/+provider\.php\?slug=([a-zA-Z0-9\-]+)[\s&] [NC]
 RewriteRule ^ /provider/%1? [R=301,L]
