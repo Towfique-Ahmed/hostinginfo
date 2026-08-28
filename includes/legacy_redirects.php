@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 /**
  * Slugs of blog posts that used to live at the site root and no longer exist.
- * Google still has them indexed, so they are 301'd to the homepage instead of
+ * Google still has them indexed, so they are 302'd to the homepage instead of
  * serving a 404, which passes their link equity on and clears the errors in
  * Search Console.
  */
@@ -38,12 +38,13 @@ const LEGACY_BLOG_SLUGS = [
 ];
 
 /**
- * Sends a permanent redirect to the homepage when $path is a retired blog URL.
+ * Sends a temporary redirect to the homepage when $path is a retired blog URL.
+ * Uses 302 (not 301) since these slugs may be reused for new content later.
  */
 function redirect_legacy_blog_url(string $path): void
 {
     if (in_array(strtolower($path), LEGACY_BLOG_SLUGS, true)) {
-        header('Location: /', true, 301);
+        header('Location: /', true, 302);
         exit;
     }
 }
