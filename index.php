@@ -56,6 +56,34 @@ $page_title = 'HostingInfo — Compare Web Hosting Providers & Find the Best Hos
 $page_description = 'An independent directory of ' . count(get_providers()) . ' web hosting providers: compare price, uptime and rating side by side, and track the coupon codes worth using.';
 $active_nav = 'home';
 
+$_base = base_url();
+$json_ld = json_encode([
+    '@context' => 'https://schema.org',
+    '@graph' => [
+        [
+            '@type' => 'WebSite',
+            '@id'   => $_base . '/#website',
+            'name'  => 'HostingInfo',
+            'url'   => $_base,
+            'description' => 'An independent reference for web hosting: compare providers on price, uptime and rating, and track the discounts worth using.',
+            'potentialAction' => [
+                '@type'  => 'SearchAction',
+                'target' => [
+                    '@type'       => 'EntryPoint',
+                    'urlTemplate' => $_base . '/providers?q={search_term_string}',
+                ],
+                'query-input' => 'required name=search_term_string',
+            ],
+        ],
+        [
+            '@type' => 'Organization',
+            '@id'   => $_base . '/#organization',
+            'name'  => 'HostingInfo',
+            'url'   => $_base,
+        ],
+    ],
+], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
 $providers = get_providers();
 $topDeals = get_top_deals(6);
 $countries = get_all_countries();

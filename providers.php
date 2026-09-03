@@ -93,6 +93,19 @@ if ($category !== '') {
 
 $formAction = $category !== '' ? category_url($category) : url('providers');
 
+if ($category !== '') {
+    $_base = base_url();
+    $json_ld = json_encode([
+        '@context'        => 'https://schema.org',
+        '@type'           => 'BreadcrumbList',
+        'itemListElement' => [
+            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home',      'item' => $_base . '/'],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Directory', 'item' => $_base . '/providers'],
+            ['@type' => 'ListItem', 'position' => 3, 'name' => $category . ' hosting'],
+        ],
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+}
+
 require __DIR__ . '/includes/header.php';
 ?>
 

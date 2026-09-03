@@ -31,9 +31,20 @@ $robots = $robots ?? 'index, follow';
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/style.css">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="HostingInfo">
 <meta property="og:title" content="<?= e($page_title) ?>">
 <meta property="og:description" content="<?= e($page_description) ?>">
 <meta property="og:url" content="<?= e(canonical_url()) ?>">
+<?php if (!empty($og_image)): ?>
+<meta property="og:image" content="<?= e($og_image) ?>">
+<meta name="twitter:image" content="<?= e($og_image) ?>">
+<?php endif; ?>
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<?= e($page_title) ?>">
+<meta name="twitter:description" content="<?= e($page_description) ?>">
+<?php if (!empty($json_ld)): ?>
+<script type="application/ld+json"><?= $json_ld ?></script>
+<?php endif; ?>
 </head>
 <body>
 
@@ -41,7 +52,7 @@ $robots = $robots ?? 'index, follow';
     <div class="container site-header__inner">
         <a href="<?= url('') ?>" class="brand">Hosting<em>Info</em></a>
 
-        <nav class="main-nav" id="mainNav">
+        <nav class="main-nav" id="mainNav" aria-label="Main navigation">
             <a href="<?= url('providers') ?>" class="<?= $active_nav === 'providers' ? 'is-active' : '' ?>">Directory</a>
             <a href="<?= url('deals') ?>" class="<?= $active_nav === 'deals' ? 'is-active' : '' ?>">Deals</a>
             <a href="<?= url('about') ?>" class="<?= $active_nav === 'about' ? 'is-active' : '' ?>">About</a>

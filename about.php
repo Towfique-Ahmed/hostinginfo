@@ -7,8 +7,19 @@ $active_nav = 'about';
 $providers = get_providers();
 $countries = get_all_countries();
 
-$page_title = 'About Us | HostingInfo';
-$page_description = 'HostingInfo is an independent directory helping you discover, compare, and choose web hosting providers from every corner of the world.';
+$page_title = 'About HostingInfo — Independent Web Hosting Research & Comparison';
+$page_description = 'HostingInfo is an independent web hosting directory tracking ' . count($providers) . ' providers across ' . count($countries) . ' countries — unbiased pricing, uptime, and rating data with no affiliate pressure.';
+
+$_base = base_url();
+$json_ld = json_encode([
+    '@context' => 'https://schema.org',
+    '@type'    => 'Organization',
+    '@id'      => $_base . '/#organization',
+    'name'     => 'HostingInfo',
+    'url'      => $_base,
+    'foundingDate' => '2024',
+    'founder'  => ['@type' => 'Person', 'name' => 'Towfique Ahmed'],
+], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
 require __DIR__ . '/includes/header.php';
 ?>

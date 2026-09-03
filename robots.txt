@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
 
+# Filtered/sorted variants canonicalise to the clean URL; no need to crawl them.
+Disallow: /*?q=
+Disallow: /*?sort=
+Disallow: /*?country=
+Disallow: /*?category=
+
 Sitemap: https://hostinginfo.online/sitemap.xml
