@@ -10,7 +10,22 @@ function get_providers(): array
 {
     static $providers = null;
     if ($providers === null) {
-        $providers = require ROOT_PATH . '/data/providers.php';
+        $raw    = require ROOT_PATH . '/data/providers.php';
+        $extras = require ROOT_PATH . '/data/provider-extras.php';
+        $providers = array_map(function (array $p) use ($extras): array {
+            $slug = $p['slug'];
+            if (isset($extras[$slug])) {
+                $p = array_merge($p, $extras[$slug]);
+            }
+            $p += [
+                'money_back'       => 30,
+                'best_for'         => [],
+                'support_channels' => [],
+                'data_centers'     => [],
+                'scores'           => [],
+            ];
+            return $p;
+        }, $raw);
     }
     return $providers;
 }
