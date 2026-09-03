@@ -4,8 +4,8 @@ require_once __DIR__ . '/includes/functions.php';
 
 $active_nav = 'contact';
 
-$page_title = 'Contact Us | HostingInfo';
-$page_description = 'Get in touch with the HostingInfo team — questions, corrections, provider suggestions, and partnership inquiries.';
+$page_title = 'Contact HostingInfo — Corrections & Provider Submissions';
+$page_description = 'Send corrections, suggest a missing hosting provider, or ask a partnership question. The HostingInfo team reviews every message.';
 
 require __DIR__ . '/includes/header.php';
 ?>

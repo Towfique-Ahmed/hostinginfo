@@ -32,6 +32,33 @@ $related = array_slice(array_values($related), 0, 4);
 
 $cheapestPlan = $provider['plans'] ? min(array_column($provider['plans'], 'price')) : (float) $provider['price'];
 
+$_base = base_url();
+$_ld = [
+    '@context' => 'https://schema.org',
+    '@graph'   => [
+        [
+            '@type'           => 'BreadcrumbList',
+            'itemListElement' => [
+                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home',      'item' => $_base . '/'],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Directory', 'item' => $_base . '/providers'],
+                ['@type' => 'ListItem', 'position' => 3, 'name' => $provider['name']],
+            ],
+        ],
+    ],
+];
+if (!empty($provider['faqs'])) {
+    $faqEntities = [];
+    foreach ($provider['faqs'] as $faq) {
+        $faqEntities[] = [
+            '@type'          => 'Question',
+            'name'           => $faq['q'],
+            'acceptedAnswer' => ['@type' => 'Answer', 'text' => $faq['a']],
+        ];
+    }
+    $_ld['@graph'][] = ['@type' => 'FAQPage', 'mainEntity' => $faqEntities];
+}
+$json_ld = json_encode($_ld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
 require __DIR__ . '/includes/header.php';
 ?>
 
