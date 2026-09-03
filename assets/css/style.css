@@ -893,3 +893,188 @@ a.contact-card:hover { background: var(--ink-raised); }
     }
     .reveal { opacity: 1; transform: none; }
 }
+
+/* ─── Score strip ──────────────────────────────────────────────────────────── */
+
+.score-strip {
+    display: flex;
+    gap: 0;
+    background: var(--ink);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 0 0 32px;
+}
+
+.score-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 16px;
+    border-right: 1px solid var(--rule);
+    text-align: center;
+}
+.score-item:last-child { border-right: none; }
+
+.score-item__label {
+    font-size: 0.7rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--fg-faint);
+    white-space: nowrap;
+}
+
+.score-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--rule);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.score-bar__fill {
+    height: 100%;
+    background: var(--signal);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+}
+
+.score-item__value {
+    font-size: 1.05rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--fg);
+}
+
+/* ─── Best-for tags ────────────────────────────────────────────────────────── */
+
+.best-for {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.best-for__label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--fg-faint);
+    white-space: nowrap;
+}
+
+.best-for__chip {
+    font-size: 0.78rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: color-mix(in srgb, var(--signal) 12%, transparent);
+    color: var(--signal);
+    border: 1px solid color-mix(in srgb, var(--signal) 30%, transparent);
+    white-space: nowrap;
+}
+
+/* ─── Infrastructure grid ──────────────────────────────────────────────────── */
+
+.infra-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.infra-card {
+    background: var(--ink);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+}
+
+.infra-card__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--fg-faint);
+    margin: 0 0 14px;
+}
+
+.infra-card__title svg {
+    width: 16px; height: 16px;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    fill: none;
+    flex-shrink: 0;
+}
+
+.infra-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.infra-list li {
+    font-size: 0.88rem;
+    color: var(--fg);
+    padding-left: 14px;
+    position: relative;
+}
+.infra-list li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--signal);
+    font-weight: 700;
+}
+
+/* ─── Guarantee badge ──────────────────────────────────────────────────────── */
+
+.guarantee-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--signal) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--signal) 25%, transparent);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--signal);
+}
+
+.guarantee-badge svg {
+    width: 16px; height: 16px;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    fill: none;
+    flex-shrink: 0;
+}
+
+.guarantee-badge--none {
+    background: color-mix(in srgb, var(--fg-faint) 8%, transparent);
+    border-color: var(--rule);
+    color: var(--fg-faint);
+}
+
+@media (max-width: 760px) {
+    .score-strip {
+        flex-wrap: wrap;
+        border-radius: var(--radius);
+    }
+    .score-item {
+        flex: 1 1 calc(33.333% - 1px);
+        padding: 14px 10px;
+        min-width: 90px;
+    }
+    .infra-grid {
+        grid-template-columns: 1fr;
+    }
+}
