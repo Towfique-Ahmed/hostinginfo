@@ -1078,3 +1078,96 @@ a.contact-card:hover { background: var(--ink-raised); }
         grid-template-columns: 1fr;
     }
 }
+
+/* ==========================================================================
+   18. Provider detail — extended (byline, TOC, who-for, compare table)
+   ========================================================================== */
+.provider-head__byline {
+    font-size: 0.78rem;
+    color: var(--fg-faint);
+    margin: 4px 0 0;
+}
+.provider-head__byline a { color: var(--fg-muted); border-bottom: 1px solid var(--rule-strong); }
+.provider-head__byline a:hover { color: var(--signal); border-color: var(--signal); }
+
+.page-toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    margin: 24px 0 0;
+    padding: 16px 18px;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+    background: var(--ink);
+}
+.page-toc__label {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-faint);
+    width: 100%;
+    margin-bottom: 4px;
+}
+.page-toc a {
+    font-size: 0.82rem;
+    color: var(--fg-muted);
+    padding: 4px 0;
+    border-bottom: 1px dotted var(--rule-strong);
+}
+.page-toc a:hover { color: var(--signal); border-color: var(--signal); }
+
+.who-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 16px; }
+.who-card {
+    padding: 18px;
+    border-radius: var(--r-md);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+.who-card--for {
+    background: color-mix(in srgb, var(--money) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--money) 22%, transparent);
+}
+.who-card--avoid {
+    background: color-mix(in srgb, var(--alert) 7%, transparent);
+    border: 1px solid color-mix(in srgb, var(--alert) 20%, transparent);
+}
+.who-card h3 {
+    font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px;
+}
+.who-card--for h3 { color: var(--money); }
+.who-card--avoid h3 { color: var(--alert); }
+.who-card p { margin: 0; color: var(--fg); max-width: none; }
+
+.compare-table-wrap { overflow-x: auto; }
+.compare-table { min-width: 560px; font-size: 0.88rem; }
+.compare-table th, .compare-table td {
+    padding: 11px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+}
+.compare-table thead th {
+    font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-faint);
+    border-bottom: 1px solid var(--rule-strong);
+}
+.compare-table tbody th { font-weight: 500; }
+.compare-table a { color: var(--fg); border-bottom: 1px solid var(--rule-strong); }
+.compare-table a:hover { color: var(--signal); border-color: var(--signal); }
+.compare-table tr.is-current { background: var(--ink-raised); }
+.compare-table tr.is-current th { color: var(--signal); }
+
+.category-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.category-links a {
+    font-family: var(--font-mono); font-size: 0.72rem;
+    padding: 6px 12px; border: 1px solid var(--rule-strong); border-radius: 999px;
+    color: var(--fg-muted);
+}
+.category-links a:hover { color: var(--signal); border-color: var(--signal); }
+
+@media (max-width: 760px) {
+    .who-grid { grid-template-columns: 1fr; }
+}

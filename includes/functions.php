@@ -15,7 +15,12 @@ function get_providers(): array
         $providers = array_map(function (array $p) use ($extras): array {
             $slug = $p['slug'];
             if (isset($extras[$slug])) {
-                $p = array_merge($p, $extras[$slug]);
+                $extra = $extras[$slug];
+                if (!empty($extra['extra_faqs'])) {
+                    $p['faqs'] = array_merge($p['faqs'] ?? [], $extra['extra_faqs']);
+                    unset($extra['extra_faqs']);
+                }
+                $p = array_merge($p, $extra);
             }
             $p += [
                 'money_back'       => 30,
@@ -23,6 +28,7 @@ function get_providers(): array
                 'support_channels' => [],
                 'data_centers'     => [],
                 'scores'           => [],
+                'editorial'        => [],
             ];
             return $p;
         }, $raw);
