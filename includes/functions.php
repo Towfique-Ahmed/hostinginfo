@@ -10,12 +10,16 @@ function get_providers(): array
 {
     static $providers = null;
     if ($providers === null) {
-        $raw    = require ROOT_PATH . '/data/providers.php';
-        $extras = require ROOT_PATH . '/data/provider-extras.php';
-        $providers = array_map(function (array $p) use ($extras): array {
+        $raw      = require ROOT_PATH . '/data/providers.php';
+        $extras   = require ROOT_PATH . '/data/provider-extras.php';
+        $profiles = require ROOT_PATH . '/data/provider-profiles.php';
+        $providers = array_map(function (array $p) use ($extras, $profiles): array {
             $slug = $p['slug'];
             if (isset($extras[$slug])) {
                 $p = array_merge($p, $extras[$slug]);
+            }
+            if (isset($profiles[$slug])) {
+                $p = array_merge($p, $profiles[$slug]);
             }
             $p += [
                 'money_back'       => 30,
@@ -23,6 +27,17 @@ function get_providers(): array
                 'support_channels' => [],
                 'data_centers'     => [],
                 'scores'           => [],
+                'overview'         => '',
+                'company'          => [],
+                'timeline'         => [],
+                'hosting_types'    => [],
+                'specs'            => [],
+                'performance'      => '',
+                'security'         => [],
+                'pricing_notes'    => [],
+                'migration'        => '',
+                'not_for'          => [],
+                'verdict'          => '',
             ];
             return $p;
         }, $raw);
@@ -109,6 +124,24 @@ function get_all_countries(): array
     }
     ksort($set);
     return $set;
+}
+
+/**
+ * Renders a multi-paragraph string of plain text as escaped <p> blocks.
+ * Paragraphs are separated by a blank line in the source.
+ */
+function paragraphs(string $text): string
+{
+    $blocks = preg_split('/\n\s*\n/', trim($text)) ?: [];
+    $out = '';
+    foreach ($blocks as $block) {
+        $block = trim($block);
+        if ($block === '') {
+            continue;
+        }
+        $out .= '<p>' . e($block) . '</p>';
+    }
+    return $out;
 }
 
 function e(?string $value): string
