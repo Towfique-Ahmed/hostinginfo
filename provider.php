@@ -34,6 +34,25 @@ $related = array_slice(array_values($related), 0, 4);
 
 $cheapestPlan = $provider['plans'] ? min(array_column($provider['plans'], 'price')) : (float) $provider['price'];
 
+// The in-page contents list. Built from the sections that actually have data,
+// so a thin provider record does not advertise empty anchors.
+$sections = ['verdict' => 'Verdict'];
+if ($provider['overview'] !== '')          { $sections['overview']       = 'Full picture'; }
+if (!empty($provider['features']))         { $sections['features']       = 'What you get'; }
+if (!empty($provider['hosting_types']))    { $sections['products']       = 'Hosting types'; }
+if (!empty($provider['plans']))            { $sections['plans']          = 'Plans & pricing'; }
+if (!empty($provider['specs']))            { $sections['specs']          = 'Specification'; }
+if ($provider['performance'] !== '')       { $sections['performance']    = 'Performance'; }
+if (!empty($provider['support_channels']) || !empty($provider['data_centers'])) {
+    $sections['infrastructure'] = 'Infrastructure';
+}
+if (!empty($provider['security']))         { $sections['security']       = 'Security'; }
+if ($provider['migration'] !== '')         { $sections['migration']      = 'Migration'; }
+$sections['tradeoff'] = 'Trade-off';
+if (!empty($provider['company']) || !empty($provider['timeline'])) { $sections['company'] = 'The company'; }
+if (!empty($provider['faqs']))             { $sections['faq']            = 'FAQ'; }
+if ($provider['verdict'] !== '')           { $sections['bottom-line']    = 'Bottom line'; }
+
 $_base = base_url();
 $_ld = [
     '@context' => 'https://schema.org',
@@ -146,7 +165,14 @@ require __DIR__ . '/includes/header.php';
     <div class="detail-layout">
         <div class="detail-main">
 
-            <section class="detail-block">
+            <nav class="toc" aria-label="On this page">
+                <span class="toc__label">On this page</span>
+                <?php foreach ($sections as $id => $label): ?>
+                    <a href="#<?= e($id) ?>"><?= e($label) ?></a>
+                <?php endforeach; ?>
+            </nav>
+
+            <section class="detail-block" id="verdict">
                 <h2>The verdict</h2>
                 <p><?= e($provider['description']) ?></p>
                 <?php if (!empty($provider['best_for'])): ?>
@@ -159,7 +185,14 @@ require __DIR__ . '/includes/header.php';
                 <?php endif; ?>
             </section>
 
-            <section class="detail-block">
+            <?php if ($provider['overview'] !== ''): ?>
+            <section class="detail-block" id="overview">
+                <h2>The full picture</h2>
+                <div class="longform"><?= paragraphs((string)$provider['overview']) ?></div>
+            </section>
+            <?php endif; ?>
+
+            <section class="detail-block" id="features">
                 <h2>What you get</h2>
                 <ul class="feature-list">
                     <?php foreach ($provider['features'] as $feature): ?>
@@ -167,6 +200,28 @@ require __DIR__ . '/includes/header.php';
                     <?php endforeach; ?>
                 </ul>
             </section>
+
+            <?php if (!empty($provider['hosting_types'])): ?>
+            <section class="detail-block" id="products">
+                <h2>Every hosting type it sells</h2>
+                <div class="table-scroll">
+                    <table class="data-table">
+                        <thead>
+                            <tr><th scope="col">Product</th><th scope="col">From</th><th scope="col">What it is</th></tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($provider['hosting_types'] as $type): ?>
+                            <tr>
+                                <th scope="row"><?= e($type['name']) ?></th>
+                                <td class="num"><?= e($type['from']) ?></td>
+                                <td><?= e($type['note']) ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <?php endif; ?>
 
             <section class="detail-block" id="plans">
                 <h2>Plans &amp; pricing</h2>
@@ -183,32 +238,43 @@ require __DIR__ . '/includes/header.php';
                         </div>
                     <?php endforeach; ?>
                 </div>
+                <?php if (!empty($provider['pricing_notes'])): ?>
+                <h3 class="detail-sub">What the price actually costs you</h3>
+                <ul class="note-list">
+                    <?php foreach ($provider['pricing_notes'] as $note): ?>
+                        <li><?= e($note) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+                <?php endif; ?>
             </section>
 
-            <section class="detail-block">
-                <h2>The trade-off</h2>
-                <div class="pc-grid">
-                    <div class="pc pc--pro">
-                        <h3>In its favour</h3>
-                        <ul>
-                            <?php foreach ($provider['pros'] as $pro): ?>
-                                <li><?= e($pro) ?></li>
+            <?php if (!empty($provider['specs'])): ?>
+            <section class="detail-block" id="specs">
+                <h2>Technical specification</h2>
+                <div class="table-scroll">
+                    <table class="data-table data-table--specs">
+                        <tbody>
+                            <?php foreach ($provider['specs'] as $label => $value): ?>
+                            <tr>
+                                <th scope="row"><?= e((string)$label) ?></th>
+                                <td><?= e((string)$value) ?></td>
+                            </tr>
                             <?php endforeach; ?>
-                        </ul>
-                    </div>
-                    <div class="pc pc--con">
-                        <h3>Worth knowing</h3>
-                        <ul>
-                            <?php foreach ($provider['cons'] as $con): ?>
-                                <li><?= e($con) ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
             </section>
+            <?php endif; ?>
+
+            <?php if ($provider['performance'] !== ''): ?>
+            <section class="detail-block" id="performance">
+                <h2>Performance in practice</h2>
+                <div class="longform"><?= paragraphs((string)$provider['performance']) ?></div>
+            </section>
+            <?php endif; ?>
 
             <?php if (!empty($provider['support_channels']) || !empty($provider['data_centers'])): ?>
-            <section class="detail-block">
+            <section class="detail-block" id="infrastructure">
                 <h2>Infrastructure &amp; support</h2>
                 <div class="infra-grid">
                     <?php if (!empty($provider['support_channels'])): ?>
@@ -241,8 +307,87 @@ require __DIR__ . '/includes/header.php';
             </section>
             <?php endif; ?>
 
+            <?php if (!empty($provider['security'])): ?>
+            <section class="detail-block" id="security">
+                <h2>Security &amp; compliance</h2>
+                <ul class="check-list">
+                    <?php foreach ($provider['security'] as $item): ?>
+                        <li><?= e($item) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </section>
+            <?php endif; ?>
+
+            <?php if ($provider['migration'] !== ''): ?>
+            <section class="detail-block" id="migration">
+                <h2>Moving a site in</h2>
+                <div class="longform"><?= paragraphs((string)$provider['migration']) ?></div>
+            </section>
+            <?php endif; ?>
+
+            <section class="detail-block" id="tradeoff">
+                <h2>The trade-off</h2>
+                <div class="pc-grid">
+                    <div class="pc pc--pro">
+                        <h3>In its favour</h3>
+                        <ul>
+                            <?php foreach ($provider['pros'] as $pro): ?>
+                                <li><?= e($pro) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    <div class="pc pc--con">
+                        <h3>Worth knowing</h3>
+                        <ul>
+                            <?php foreach ($provider['cons'] as $con): ?>
+                                <li><?= e($con) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+                <?php if (!empty($provider['not_for'])): ?>
+                <h3 class="detail-sub">Who should look elsewhere</h3>
+                <ul class="cross-list">
+                    <?php foreach ($provider['not_for'] as $item): ?>
+                        <li><?= e($item) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+                <?php endif; ?>
+            </section>
+
+            <?php if (!empty($provider['company']) || !empty($provider['timeline'])): ?>
+            <section class="detail-block" id="company">
+                <h2>The company behind it</h2>
+                <?php if (!empty($provider['company'])): ?>
+                <div class="table-scroll">
+                    <table class="data-table data-table--specs">
+                        <tbody>
+                            <?php foreach ($provider['company'] as $label => $value): ?>
+                            <tr>
+                                <th scope="row"><?= e((string)$label) ?></th>
+                                <td><?= e((string)$value) ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php endif; ?>
+                <?php if (!empty($provider['timeline'])): ?>
+                <h3 class="detail-sub">How it got here</h3>
+                <ol class="timeline">
+                    <?php foreach ($provider['timeline'] as $entry): ?>
+                        <li>
+                            <span class="timeline__year num"><?= (int)$entry['year'] ?></span>
+                            <span class="timeline__event"><?= e($entry['event']) ?></span>
+                        </li>
+                    <?php endforeach; ?>
+                </ol>
+                <?php endif; ?>
+            </section>
+            <?php endif; ?>
+
             <?php if (!empty($provider['faqs'])): ?>
-            <section class="detail-block">
+            <section class="detail-block" id="faq">
                 <h2>Common questions</h2>
                 <div class="faq">
                     <?php foreach ($provider['faqs'] as $faq): ?>
@@ -252,6 +397,13 @@ require __DIR__ . '/includes/header.php';
                         </details>
                     <?php endforeach; ?>
                 </div>
+            </section>
+            <?php endif; ?>
+
+            <?php if ($provider['verdict'] !== ''): ?>
+            <section class="detail-block" id="bottom-line">
+                <h2>The bottom line</h2>
+                <div class="bottom-line"><?= paragraphs((string)$provider['verdict']) ?></div>
             </section>
             <?php endif; ?>
 
@@ -281,6 +433,16 @@ require __DIR__ . '/includes/header.php';
                         <span class="spec-row__label">Base</span>
                         <span class="spec-row__value" style="font-size:0.85rem"><?= e($provider['country']) ?></span>
                     </div>
+                    <div class="spec-row">
+                        <span class="spec-row__label">Type</span>
+                        <span class="spec-row__value" style="font-size:0.85rem"><?= e(implode(', ', $provider['categories'])) ?></span>
+                    </div>
+                    <?php if (!empty($provider['data_centers'])): ?>
+                    <div class="spec-row">
+                        <span class="spec-row__label">Locations</span>
+                        <span class="spec-row__value"><?= count($provider['data_centers']) ?></span>
+                    </div>
+                    <?php endif; ?>
                     <?php if ((int)$provider['money_back'] > 0): ?>
                     <div class="spec-row">
                         <span class="spec-row__label">Guarantee</span>

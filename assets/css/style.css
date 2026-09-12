@@ -901,7 +901,7 @@ a.contact-card:hover { background: var(--ink-raised); }
     gap: 0;
     background: var(--ink);
     border: 1px solid var(--rule);
-    border-radius: var(--radius);
+    border-radius: var(--r-md);
     overflow: hidden;
     margin: 0 0 32px;
 }
@@ -987,7 +987,7 @@ a.contact-card:hover { background: var(--ink-raised); }
 .infra-card {
     background: var(--ink);
     border: 1px solid var(--rule);
-    border-radius: var(--radius);
+    border-radius: var(--r-md);
     padding: 20px 22px;
 }
 
@@ -1042,7 +1042,7 @@ a.contact-card:hover { background: var(--ink-raised); }
     gap: 8px;
     margin-top: 14px;
     padding: 10px 14px;
-    border-radius: var(--radius);
+    border-radius: var(--r-md);
     background: color-mix(in srgb, var(--signal) 10%, transparent);
     border: 1px solid color-mix(in srgb, var(--signal) 25%, transparent);
     font-size: 0.82rem;
@@ -1067,7 +1067,7 @@ a.contact-card:hover { background: var(--ink-raised); }
 @media (max-width: 760px) {
     .score-strip {
         flex-wrap: wrap;
-        border-radius: var(--radius);
+        border-radius: var(--r-md);
     }
     .score-item {
         flex: 1 1 calc(33.333% - 1px);
@@ -1077,4 +1077,161 @@ a.contact-card:hover { background: var(--ink-raised); }
     .infra-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* ==========================================================================
+   Deep provider profile: contents index, data tables, timeline, note lists
+   --------------------------------------------------------------------------
+   The profile page is long by design, so it needs an index at the top and
+   scannable table/list forms for the detail that does not want to be prose.
+   ========================================================================== */
+
+/* on-page contents */
+.toc {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 10px;
+    padding: 14px 16px;
+    margin-bottom: 40px;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+    background: var(--ink-raised);
+}
+.toc__label {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-faint);
+    margin-right: 4px;
+}
+.toc a {
+    font-size: 0.8rem;
+    color: var(--fg-muted);
+    padding: 3px 9px;
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+.toc a:hover { color: var(--signal); border-color: var(--signal); }
+
+/* long-form editorial passages inside a detail block */
+.longform p {
+    max-width: var(--measure);
+    font-size: 0.96rem;
+    line-height: 1.72;
+    color: var(--fg-muted);
+}
+.longform p + p { margin-top: 1em; }
+
+/* a secondary heading inside a detail block */
+.detail-sub {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-faint);
+    margin: 32px 0 12px;
+}
+
+/* specification and product tables */
+.table-scroll { overflow-x: auto; }
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+.data-table th,
+.data-table td {
+    text-align: left;
+    vertical-align: top;
+    padding: 11px 16px 11px 0;
+    border-bottom: 1px solid var(--rule);
+}
+.data-table thead th {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-faint);
+    border-bottom-color: var(--rule-strong);
+    white-space: nowrap;
+}
+.data-table tbody th {
+    font-weight: 500;
+    color: var(--fg);
+    white-space: nowrap;
+}
+.data-table td { color: var(--fg-muted); }
+.data-table td.num { font-family: var(--font-mono); color: var(--fg); white-space: nowrap; }
+.data-table--specs tbody th { width: 34%; min-width: 150px; white-space: normal; }
+.data-table tbody tr:last-child th,
+.data-table tbody tr:last-child td { border-bottom: 0; }
+
+/* marked lists: neutral notes, positives, exclusions */
+.note-list li,
+.check-list li,
+.cross-list li {
+    position: relative;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--fg-muted);
+    padding: 9px 0 9px 22px;
+    border-bottom: 1px solid var(--rule);
+    max-width: var(--measure);
+}
+.note-list li:last-child,
+.check-list li:last-child,
+.cross-list li:last-child { border-bottom: 0; }
+.note-list li::before,
+.check-list li::before,
+.cross-list li::before {
+    position: absolute;
+    left: 0;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+}
+.note-list li::before  { content: "•"; color: var(--signal); }
+.check-list li::before { content: "✓"; color: var(--money); }
+.cross-list li::before { content: "×"; color: var(--alert); }
+
+/* company history */
+.timeline { display: flex; flex-direction: column; max-width: var(--measure); }
+.timeline li {
+    display: flex;
+    gap: 18px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--rule);
+}
+.timeline li:last-child { border-bottom: 0; }
+.timeline__year {
+    flex: 0 0 52px;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--signal);
+}
+.timeline__event { font-size: 0.9rem; line-height: 1.55; color: var(--fg-muted); }
+
+/* closing recommendation */
+.bottom-line {
+    border-left: 2px solid var(--signal);
+    padding: 4px 0 4px 20px;
+}
+.bottom-line p {
+    max-width: var(--measure);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--fg);
+}
+.bottom-line p + p { margin-top: 1em; }
+
+@media (max-width: 640px) {
+    .toc { padding: 12px; margin-bottom: 30px; }
+    .data-table { font-size: 0.84rem; }
+    .data-table--specs tbody th { width: auto; min-width: 120px; }
+    .timeline li { flex-direction: column; gap: 2px; }
+    .timeline__year { flex: none; }
 }
