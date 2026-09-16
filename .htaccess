@@ -24,14 +24,23 @@ RewriteRule ^ /? [R=301,L]
 RewriteCond %{THE_REQUEST} \s/+([^.\s]+)\.php[\s?] [NC]
 RewriteRule ^ /%1 [R=301,L]
 
-# 4) Internally map /provider/<slug> to provider.php?slug=<slug>
+# 4) Internally map /provider/<slug>/coupons to provider-coupons.php
+RewriteRule ^provider/([a-zA-Z0-9\-]+)/coupons/?$ provider-coupons.php?slug=$1 [L,QSA]
+
+# 4a) Internally map /provider/<slug> to provider.php
 RewriteRule ^provider/([a-zA-Z0-9\-]+)/?$ provider.php?slug=$1 [L,QSA]
 
-# 4a) Internally map /providers/<category>-hosting to providers.php
+# 4b) Internally map /providers/<category>-hosting to providers.php
 RewriteRule ^providers/([a-zA-Z0-9\-]+)/?$ providers.php?category_slug=$1 [L,QSA]
 
-# 4b) Internally map /sitemap.xml to sitemap.php
+# 4c) Internally map /compare/<a>-vs-<b> to compare-vs.php
+RewriteRule ^compare/([a-zA-Z0-9\-]+)/?$ compare-vs.php?pair=$1 [L,QSA]
+
+# 4d) Internally map /sitemap.xml to sitemap.php
 RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+# 4e) Internally map /tools/whois to whois.php
+RewriteRule ^tools/whois/?$ whois.php [L,QSA]
 
 # 5) Internally map extensionless page requests (e.g. /providers, /deals) to their .php file
 RewriteCond %{REQUEST_FILENAME} !-f

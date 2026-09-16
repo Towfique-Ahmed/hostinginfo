@@ -780,8 +780,8 @@ a.contact-card:hover { background: var(--ink-raised); }
 .site-footer { border-top: 1px solid var(--rule-strong); padding: 52px 0 32px; margin-top: 40px; }
 .footer-grid {
     display: grid;
-    grid-template-columns: 1.6fr repeat(3, 1fr);
-    gap: 40px;
+    grid-template-columns: 1.6fr repeat(4, 1fr);
+    gap: 32px;
     padding-bottom: 40px;
     border-bottom: 1px solid var(--rule);
 }
@@ -1234,4 +1234,81 @@ a.contact-card:hover { background: var(--ink-raised); }
     .data-table--specs tbody th { width: auto; min-width: 120px; }
     .timeline li { flex-direction: column; gap: 2px; }
     .timeline__year { flex: none; }
+}
+
+/* ==========================================================================
+   19. Compare tool
+   ========================================================================== */
+.vs-head {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 20px;
+    padding: 32px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+}
+.vs-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    padding: 16px;
+    border-radius: var(--r-md);
+    transition: background-color 0.15s ease;
+}
+.vs-side:hover { background: var(--ink-raised); }
+.vs-side__name { font-family: var(--font-display); font-size: 1.15rem; }
+.vs-side__price { font-family: var(--font-mono); font-size: 1.1rem; color: var(--fg); }
+.vs-side__price small { color: var(--fg-faint); font-size: 0.7rem; }
+.vs-versus {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.14em;
+    color: var(--fg-faint);
+}
+.vs-table td.cell-win,
+.vs-table th.cell-win { color: var(--money); font-weight: 500; }
+
+/* ==========================================================================
+   20. Human sitemap
+   ========================================================================== */
+.human-sitemap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 4px 20px;
+}
+.human-sitemap-grid > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 0.87rem;
+}
+.human-sitemap-grid a { color: var(--fg-muted); }
+.human-sitemap-grid a:hover { color: var(--signal); }
+.human-sitemap-grid__sub { font-family: var(--font-mono); font-size: 0.72rem; color: var(--fg-faint) !important; }
+
+/* ==========================================================================
+   21. Whois tool
+   ========================================================================== */
+.whois-result {
+    background: var(--ink-sunken);
+    box-shadow: 0 0 0 1px var(--rule);
+    border-radius: var(--r-md);
+    padding: 20px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--fg-muted);
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-x: auto;
+}
+
+@media (max-width: 640px) {
+    .vs-head { grid-template-columns: 1fr; }
+    .vs-versus { padding: 4px 0; }
 }

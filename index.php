@@ -27,9 +27,19 @@ if (preg_match('#^providers/([a-zA-Z0-9\-]+)$#', $requestPath, $m)) {
     require __DIR__ . '/providers.php';
     exit;
 }
+if (preg_match('#^provider/([a-zA-Z0-9\-]+)/coupons$#', $requestPath, $m)) {
+    $_GET['slug'] = $m[1];
+    require __DIR__ . '/provider-coupons.php';
+    exit;
+}
 if (preg_match('#^provider/([a-zA-Z0-9\-]+)$#', $requestPath, $m)) {
     $_GET['slug'] = $m[1];
     require __DIR__ . '/provider.php';
+    exit;
+}
+if (preg_match('#^compare/([a-zA-Z0-9\-]+)$#', $requestPath, $m)) {
+    $_GET['pair'] = $m[1];
+    require __DIR__ . '/compare-vs.php';
     exit;
 }
 if ($requestPath === 'sitemap.xml') {
@@ -46,6 +56,38 @@ if ($requestPath === 'contact') {
 }
 if ($requestPath === 'privacy-policy') {
     require __DIR__ . '/privacy-policy.php';
+    exit;
+}
+if ($requestPath === 'terms-of-service') {
+    require __DIR__ . '/terms-of-service.php';
+    exit;
+}
+if ($requestPath === 'rating-methodology') {
+    require __DIR__ . '/rating-methodology.php';
+    exit;
+}
+if ($requestPath === 'awards') {
+    require __DIR__ . '/awards.php';
+    exit;
+}
+if ($requestPath === 'human-sitemap') {
+    require __DIR__ . '/human-sitemap.php';
+    exit;
+}
+if ($requestPath === 'tools') {
+    require __DIR__ . '/tools.php';
+    exit;
+}
+if ($requestPath === 'tools/whois') {
+    require __DIR__ . '/whois.php';
+    exit;
+}
+if ($requestPath === 'compare') {
+    require __DIR__ . '/comparisons.php';
+    exit;
+}
+if ($requestPath === 'hosting-categories') {
+    require __DIR__ . '/hosting-categories.php';
     exit;
 }
 if ($requestPath !== '' && $requestPath !== 'index.php') {

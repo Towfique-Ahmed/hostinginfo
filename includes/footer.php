@@ -22,6 +22,7 @@
                 <a href="<?= url('providers') ?>">All providers</a>
                 <a href="<?= url('providers', ['sort' => 'price']) ?>">Cheapest first</a>
                 <a href="<?= url('deals') ?>">Current deals</a>
+                <a href="<?= url('hosting-categories') ?>">All categories</a>
             </div>
 
             <div class="footer-col">
@@ -32,10 +33,20 @@
             </div>
 
             <div class="footer-col">
+                <h4>Tools</h4>
+                <a href="<?= url('compare') ?>">Compare providers</a>
+                <a href="<?= url('tools/whois') ?>">Whois lookup</a>
+                <a href="<?= url('awards') ?>">Awards</a>
+                <a href="<?= url('rating-methodology') ?>">Rating methodology</a>
+            </div>
+
+            <div class="footer-col">
                 <h4>Masthead</h4>
                 <a href="<?= url('about') ?>">About</a>
                 <a href="<?= url('contact') ?>">Contact</a>
                 <a href="<?= url('privacy-policy') ?>">Privacy policy</a>
+                <a href="<?= url('terms-of-service') ?>">Terms of service</a>
+                <a href="<?= url('human-sitemap') ?>">Sitemap</a>
             </div>
         </div>
 
