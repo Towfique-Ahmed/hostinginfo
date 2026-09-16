@@ -263,6 +263,31 @@ function rating_meter(float $rating): string
         . '</span></span>';
 }
 
+/**
+ * A short, human adjective for a numeric rating, used alongside the raw number
+ * on richer provider cards.
+ */
+function rating_adjective(float $rating): string
+{
+    if ($rating >= 4.8) return 'Outstanding';
+    if ($rating >= 4.5) return 'Excellent';
+    if ($rating >= 4.0) return 'Great';
+    if ($rating >= 3.5) return 'Good';
+    return 'Fair';
+}
+
+/**
+ * Up to $limit short highlight strings for a provider card: prefers the curated
+ * "best for" tags, falling back to raw feature strings when a provider has none.
+ *
+ * @return array<int, string>
+ */
+function provider_highlights(array $provider, int $limit = 3): array
+{
+    $pool = !empty($provider['best_for']) ? $provider['best_for'] : $provider['features'];
+    return array_slice($pool, 0, $limit);
+}
+
 function format_price(float $price): string
 {
     if ($price == 0.0) {
