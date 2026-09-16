@@ -55,6 +55,8 @@ $robots = $robots ?? 'index, follow';
         <nav class="main-nav" id="mainNav" aria-label="Main navigation">
             <a href="<?= url('providers') ?>" class="<?= $active_nav === 'providers' ? 'is-active' : '' ?>">Directory</a>
             <a href="<?= url('deals') ?>" class="<?= $active_nav === 'deals' ? 'is-active' : '' ?>">Deals</a>
+            <a href="<?= url('compare') ?>" class="<?= $active_nav === 'compare' ? 'is-active' : '' ?>">Compare</a>
+            <a href="<?= url('awards') ?>" class="<?= $active_nav === 'awards' ? 'is-active' : '' ?>">Awards</a>
             <a href="<?= url('about') ?>" class="<?= $active_nav === 'about' ? 'is-active' : '' ?>">About</a>
         </nav>
 

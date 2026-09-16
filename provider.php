@@ -474,6 +474,9 @@ require __DIR__ . '/includes/header.php';
                         Copy
                     </button>
                 </div>
+                <a href="<?= e(provider_coupons_url($provider)) ?>" class="section-head__link" style="margin-top:10px">All <?= e($provider['name']) ?> coupons
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
             </div>
             <?php endif; ?>
 
@@ -487,6 +490,21 @@ require __DIR__ . '/includes/header.php';
                             <div>
                                 <div class="related__name"><?= e($r['name']) ?></div>
                                 <div class="related__meta"><?= number_format((float)$r['rating'], 1) ?> · <?= format_price((float)$r['price']) ?>/mo</div>
+                            </div>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <div class="rail__card">
+                <h3>Compare with a similar host</h3>
+                <div class="related">
+                    <?php foreach (array_slice($related, 0, 4) as $r): ?>
+                        <a href="<?= e(compare_url($provider, $r)) ?>">
+                            <?= provider_badge($r, 'sm') ?>
+                            <div>
+                                <div class="related__name">vs <?= e($r['name']) ?></div>
+                                <div class="related__meta">Side-by-side comparison</div>
                             </div>
                         </a>
                     <?php endforeach; ?>

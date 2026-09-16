@@ -340,6 +340,49 @@ function provider_url(array|string $provider): string
 }
 
 /**
+ * Builds the clean /provider/{slug}/coupons URL for a provider record or slug.
+ */
+function provider_coupons_url(array|string $provider): string
+{
+    $slug = is_array($provider) ? $provider['slug'] : $provider;
+    return '/provider/' . rawurlencode($slug) . '/coupons';
+}
+
+/**
+ * Builds the clean /compare/{a}-vs-{b} URL for two provider records or slugs.
+ */
+function compare_url(array|string $a, array|string $b): string
+{
+    $slugA = is_array($a) ? $a['slug'] : $a;
+    $slugB = is_array($b) ? $b['slug'] : $b;
+    return '/compare/' . rawurlencode($slugA) . '-vs-' . rawurlencode($slugB);
+}
+
+/**
+ * Splits a "{a}-vs-{b}" pair slug into two known provider records. Tries every
+ * "-vs-" occurrence as the split point (there is normally only one) so a slug
+ * that happens to contain "vs" elsewhere cannot produce a false match, and
+ * returns null unless both halves resolve to a real provider.
+ *
+ * @return array{0: array<string, mixed>, 1: array<string, mixed>}|null
+ */
+function resolve_compare_pair(string $pairSlug): ?array
+{
+    $offset = 0;
+    while (($pos = strpos($pairSlug, '-vs-', $offset)) !== false) {
+        $slugA = substr($pairSlug, 0, $pos);
+        $slugB = substr($pairSlug, $pos + 4);
+        $a = get_provider_by_slug($slugA);
+        $b = get_provider_by_slug($slugB);
+        if ($a !== null && $b !== null && $slugA !== $slugB) {
+            return [$a, $b];
+        }
+        $offset = $pos + 1;
+    }
+    return null;
+}
+
+/**
  * Scheme + host only, no path: e.g. "https://hostinginfo.online".
  */
 function base_url(): string
