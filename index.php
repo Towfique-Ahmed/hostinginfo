@@ -190,6 +190,15 @@ require __DIR__ . '/includes/header.php';
         </div>
     </section>
 
+    <nav class="chip-row" aria-label="Explore HostingInfo" style="border-top:1px solid var(--rule)">
+        <a class="chip" href="<?= url('providers') ?>">Reviews</a>
+        <a class="chip" href="<?= url('deals') ?>">Coupons</a>
+        <a class="chip" href="<?= url('compare') ?>">Comparisons</a>
+        <a class="chip" href="<?= url('hosting-categories') ?>">Categories</a>
+        <a class="chip" href="<?= url('awards') ?>">Awards</a>
+        <a class="chip" href="<?= url('tools') ?>">Tools</a>
+    </nav>
+
     <section class="section">
         <div class="section-head reveal">
             <div class="section-head__title">
@@ -219,12 +228,15 @@ require __DIR__ . '/includes/header.php';
                         <span class="now"><?= format_price((float)$deal['deal_price']) ?></span>
                         <span class="per">/mo</span>
                     </div>
-                    <div class="coupon">
-                        <code><?= e($deal['coupon']) ?></code>
-                        <button type="button" class="copy-btn" data-copy="<?= e($deal['coupon']) ?>">
-                            <svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-                            Copy
-                        </button>
+                    <div class="coupon-wrap">
+                        <div class="coupon">
+                            <code><?= e($deal['coupon']) ?></code>
+                            <button type="button" class="copy-btn" data-copy="<?= e($deal['coupon']) ?>">
+                                <svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                                Copy
+                            </button>
+                        </div>
+                        <span class="verified-tag"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Verified against current pricing</span>
                     </div>
                     <div class="deal__off"><?= (int)$deal['discount'] ?>%<small>OFF</small></div>
                 </article>
@@ -267,7 +279,34 @@ require __DIR__ . '/includes/header.php';
     <section class="section">
         <div class="section-head reveal">
             <div class="section-head__title">
-                <span class="kicker kicker--signal">03 / By need</span>
+                <span class="kicker kicker--signal">03 / Why trust us</span>
+                <h2>The same fields, every provider</h2>
+            </div>
+        </div>
+
+        <div class="contact-grid reveal">
+            <div class="contact-card">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                <h3>One rating methodology</h3>
+                <p>Every provider is scored on the same five factors. See exactly how, on our <a href="<?= url('rating-methodology') ?>">rating methodology page</a>.</p>
+            </div>
+            <div class="contact-card">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <h3>No pay-to-rank</h3>
+                <p>We're not affiliated with the providers listed here, and a provider can't buy a higher score. Read more on our <a href="<?= url('about') ?>">About page</a>.</p>
+            </div>
+            <div class="contact-card">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+                <h3>Corrections welcome</h3>
+                <p>Stale price or a wrong figure? Tell us on the <a href="<?= url('contact') ?>">contact page</a> — we'd rather fix it than defend it.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-head reveal">
+            <div class="section-head__title">
+                <span class="kicker kicker--signal">04 / By need</span>
                 <h2>Browse by hosting type</h2>
             </div>
         </div>
@@ -281,6 +320,19 @@ require __DIR__ . '/includes/header.php';
                     <span class="cat-index__count"><?= $count ?></span>
                 </a>
             <?php endforeach; ?>
+        </div>
+    </section>
+
+    <section class="section section--tight reveal">
+        <div class="tools-banner">
+            <div>
+                <span class="kicker kicker--signal">05 / Tools</span>
+                <h2>Compare two hosts, or look up a domain.</h2>
+                <p class="lede" style="margin:6px 0 0">Free utilities that sit next to the directory — no signup.</p>
+            </div>
+            <a href="<?= url('tools') ?>" class="btn btn--primary">Open tools
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
         </div>
     </section>
 

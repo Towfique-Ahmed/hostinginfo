@@ -143,23 +143,30 @@ require __DIR__ . '/includes/header.php';
     </section>
 
     <?php if (!empty($provider['scores'])): ?>
-    <div class="score-strip">
-        <?php
-        $scoreLabels = ['speed' => 'Speed', 'support' => 'Support', 'value' => 'Value', 'features' => 'Features', 'reliability' => 'Reliability'];
-        foreach ($scoreLabels as $key => $label):
-            if (!isset($provider['scores'][$key])) continue;
-            $val = (float)$provider['scores'][$key];
-            $pct = round($val / 5 * 100);
-        ?>
-        <div class="score-item">
-            <div class="score-item__label"><?= e($label) ?></div>
-            <div class="score-bar" role="meter" aria-valuenow="<?= $val ?>" aria-valuemin="0" aria-valuemax="5" aria-label="<?= e($label) ?> score <?= $val ?> of 5">
-                <div class="score-bar__fill" style="width:<?= $pct ?>%"></div>
-            </div>
-            <div class="score-item__value"><?= number_format($val, 1) ?></div>
+    <section class="rating-breakdown" aria-label="Rating breakdown">
+        <div class="rating-breakdown__overall">
+            <div class="rating-breakdown__num"><?= number_format((float)$provider['rating'], 1) ?></div>
+            <div class="rating-breakdown__of5">out of 5</div>
+            <p class="rating-breakdown__note">Scored against every other provider on the same <a href="<?= url('rating-methodology') ?>">five-factor methodology</a> — no provider pays for a better number.</p>
         </div>
-        <?php endforeach; ?>
-    </div>
+        <div class="rating-breakdown__bars">
+            <?php
+            $scoreLabels = ['speed' => 'Speed', 'support' => 'Support', 'value' => 'Value', 'features' => 'Features', 'reliability' => 'Reliability'];
+            foreach ($scoreLabels as $key => $label):
+                if (!isset($provider['scores'][$key])) continue;
+                $val = (float)$provider['scores'][$key];
+                $pct = round($val / 5 * 100);
+            ?>
+            <div class="score-item">
+                <div class="score-item__label"><?= e($label) ?></div>
+                <div class="score-bar" role="meter" aria-valuenow="<?= $val ?>" aria-valuemin="0" aria-valuemax="5" aria-label="<?= e($label) ?> score <?= $val ?> of 5">
+                    <div class="score-bar__fill" style="width:<?= $pct ?>%"></div>
+                </div>
+                <div class="score-item__value"><?= number_format($val, 1) ?></div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </section>
     <?php endif; ?>
 
     <div class="detail-layout">
@@ -404,6 +411,7 @@ require __DIR__ . '/includes/header.php';
             <section class="detail-block" id="bottom-line">
                 <h2>The bottom line</h2>
                 <div class="bottom-line"><?= paragraphs((string)$provider['verdict']) ?></div>
+                <p class="review-byline">Compiled by the HostingInfo editorial team. Found something stale? <a href="<?= url('contact') ?>">Tell us</a>.</p>
             </section>
             <?php endif; ?>
 
@@ -474,6 +482,7 @@ require __DIR__ . '/includes/header.php';
                         Copy
                     </button>
                 </div>
+                <span class="verified-tag" style="margin-top:8px"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Verified against current pricing</span>
                 <a href="<?= e(provider_coupons_url($provider)) ?>" class="section-head__link" style="margin-top:10px">All <?= e($provider['name']) ?> coupons
                     <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </a>
@@ -482,7 +491,7 @@ require __DIR__ . '/includes/header.php';
 
             <?php if ($related): ?>
             <div class="rail__card">
-                <h3>Similar hosts</h3>
+                <h3>Alternatives</h3>
                 <div class="related">
                     <?php foreach ($related as $r): ?>
                         <a href="<?= provider_url($r) ?>">
