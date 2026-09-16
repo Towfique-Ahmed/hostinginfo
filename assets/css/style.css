@@ -1387,33 +1387,17 @@ a.contact-card:hover { background: var(--ink-raised); }
 }
 
 /* ==========================================================================
-   22. Explore strips (horizontal-scroll tile rows)
+   22. Explore panels (tabbed tile grids)
    ========================================================================== */
-.explore-strip { padding: 30px 0; border-top: 1px solid var(--rule); }
 .explore-strip__head {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    margin-bottom: 16px;
-}
-.explore-strip__icon {
-    flex: 0 0 38px;
-    width: 38px; height: 38px;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--ink-raised);
-    border-radius: var(--r-md);
-}
-.explore-strip__icon svg { width: 18px; height: 18px; stroke: var(--signal); fill: none; stroke-width: 1.6; }
-.explore-strip__title-row {
-    flex: 1;
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     gap: 16px;
     flex-wrap: wrap;
+    margin-bottom: 16px;
 }
-.explore-strip__title-row h2 { font-size: 1.15rem; margin: 0 0 3px; }
-.explore-strip__desc { font-size: 0.83rem; color: var(--fg-muted); margin: 0; max-width: 52ch; }
+.explore-strip__desc { font-size: 0.87rem; color: var(--fg-muted); margin: 0; max-width: 52ch; }
 
 .tile-scroll {
     display: flex;

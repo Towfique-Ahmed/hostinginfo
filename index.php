@@ -214,115 +214,109 @@ require __DIR__ . '/includes/header.php';
         </div>
     </section>
 
-    <section class="explore-strip">
-        <div class="explore-strip__head">
-            <span class="explore-strip__icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg></span>
-            <div class="explore-strip__title-row">
-                <div>
-                    <h2>Explore categories</h2>
+    <section class="section">
+        <div class="section-head reveal">
+            <div class="section-head__title">
+                <span class="kicker kicker--signal">01 / Explore</span>
+                <h2>Explore HostingInfo</h2>
+            </div>
+        </div>
+
+        <div class="rec-tabs reveal" data-tabgroup="explore" role="tablist">
+            <button type="button" class="rec-tab is-active" data-tab="categories">Categories</button>
+            <button type="button" class="rec-tab" data-tab="reviews">Reviews</button>
+            <button type="button" class="rec-tab" data-tab="coupons">Coupons</button>
+            <button type="button" class="rec-tab" data-tab="comparisons">Comparisons</button>
+        </div>
+
+        <div class="reveal" data-tabpanels="explore">
+            <div class="rec-panel is-active" data-tab="categories">
+                <div class="explore-strip__head">
                     <p class="explore-strip__desc">Every hosting type we track, with how many providers offer it.</p>
+                    <a href="<?= url('hosting-categories') ?>" class="section-head__link">See all
+                        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
                 </div>
-                <a href="<?= url('hosting-categories') ?>" class="section-head__link">See all
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
+                <div class="tile-scroll">
+                    <?php foreach ($categories as $cat):
+                        $count = count(array_filter($providers, fn($p) => in_array($cat, $p['categories'], true))); ?>
+                        <a class="explore-tile" href="<?= e(category_url($cat)) ?>">
+                            <span class="explore-tile__icon"><?= category_icon($cat) ?></span>
+                            <span class="explore-tile__body">
+                                <span class="explore-tile__name"><?= e($cat) ?> hosting</span>
+                                <span class="explore-tile__meta"><?= $count ?> providers</span>
+                            </span>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
             </div>
-        </div>
-        <div class="tile-scroll">
-            <?php foreach ($categories as $cat):
-                $count = count(array_filter($providers, fn($p) => in_array($cat, $p['categories'], true))); ?>
-                <a class="explore-tile" href="<?= e(category_url($cat)) ?>">
-                    <span class="explore-tile__icon"><?= category_icon($cat) ?></span>
-                    <span class="explore-tile__body">
-                        <span class="explore-tile__name"><?= e($cat) ?> hosting</span>
-                        <span class="explore-tile__meta"><?= $count ?> providers</span>
-                    </span>
-                </a>
-            <?php endforeach; ?>
-        </div>
-    </section>
 
-    <section class="explore-strip">
-        <div class="explore-strip__head">
-            <span class="explore-strip__icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.2-5.4 3.2 1.3-6-4.6-4.1 6.1-.6z"/></svg></span>
-            <div class="explore-strip__title-row">
-                <div>
-                    <h2>Explore reviews</h2>
+            <div class="rec-panel" data-tab="reviews">
+                <div class="explore-strip__head">
                     <p class="explore-strip__desc">Our highest-rated providers, one tap from the full profile.</p>
+                    <a href="<?= url('providers') ?>" class="section-head__link">See all
+                        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
                 </div>
-                <a href="<?= url('providers') ?>" class="section-head__link">See all
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
+                <div class="tile-scroll">
+                    <?php foreach ($exploreReviews as $p): ?>
+                        <a class="explore-tile" href="<?= provider_url($p) ?>">
+                            <?= provider_badge($p, 'sm') ?>
+                            <span class="explore-tile__body">
+                                <span class="explore-tile__name"><?= e($p['name']) ?></span>
+                                <span class="explore-tile__meta"><?= number_format((float)$p['rating'], 1) ?>/5</span>
+                            </span>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
             </div>
-        </div>
-        <div class="tile-scroll">
-            <?php foreach ($exploreReviews as $p): ?>
-                <a class="explore-tile" href="<?= provider_url($p) ?>">
-                    <?= provider_badge($p, 'sm') ?>
-                    <span class="explore-tile__body">
-                        <span class="explore-tile__name"><?= e($p['name']) ?></span>
-                        <span class="explore-tile__meta"><?= number_format((float)$p['rating'], 1) ?>/5</span>
-                    </span>
-                </a>
-            <?php endforeach; ?>
-        </div>
-    </section>
 
-    <section class="explore-strip">
-        <div class="explore-strip__head">
-            <span class="explore-strip__icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2h7a2 2 0 0 1 2 2v7l-9 9-9-9 9-9z"/><path d="M9 9h.01"/></svg></span>
-            <div class="explore-strip__title-row">
-                <div>
-                    <h2>Explore coupons</h2>
+            <div class="rec-panel" data-tab="coupons">
+                <div class="explore-strip__head">
                     <p class="explore-strip__desc">Every provider with a live discount code right now.</p>
+                    <a href="<?= url('deals') ?>" class="section-head__link">See all <?= count($allDeals) ?>
+                        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
                 </div>
-                <a href="<?= url('deals') ?>" class="section-head__link">See all <?= count($allDeals) ?>
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
+                <div class="tile-scroll">
+                    <?php foreach ($exploreCoupons as $deal): $p = $deal['provider']; ?>
+                        <a class="explore-tile" href="<?= e(provider_coupons_url($p)) ?>">
+                            <?= provider_badge($p, 'sm') ?>
+                            <span class="explore-tile__body">
+                                <span class="explore-tile__name"><?= e($p['name']) ?></span>
+                                <span class="explore-tile__meta"><?= (int)$deal['discount'] ?>% off</span>
+                            </span>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
             </div>
-        </div>
-        <div class="tile-scroll">
-            <?php foreach ($exploreCoupons as $deal): $p = $deal['provider']; ?>
-                <a class="explore-tile" href="<?= e(provider_coupons_url($p)) ?>">
-                    <?= provider_badge($p, 'sm') ?>
-                    <span class="explore-tile__body">
-                        <span class="explore-tile__name"><?= e($p['name']) ?></span>
-                        <span class="explore-tile__meta"><?= (int)$deal['discount'] ?>% off</span>
-                    </span>
-                </a>
-            <?php endforeach; ?>
-        </div>
-    </section>
 
-    <section class="explore-strip">
-        <div class="explore-strip__head">
-            <span class="explore-strip__icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M12 6L5 18h14z"/></svg></span>
-            <div class="explore-strip__title-row">
-                <div>
-                    <h2>Explore comparisons</h2>
+            <div class="rec-panel" data-tab="comparisons">
+                <div class="explore-strip__head">
                     <p class="explore-strip__desc">Popular match-ups among our top-rated providers.</p>
+                    <a href="<?= url('compare') ?>" class="section-head__link">See all
+                        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
                 </div>
-                <a href="<?= url('compare') ?>" class="section-head__link">See all
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
+                <div class="tile-scroll">
+                    <?php foreach ($explorePairs as [$pa, $pb]): ?>
+                        <a class="explore-tile" href="<?= e(compare_url($pa, $pb)) ?>">
+                            <?= provider_badge($pa, 'sm') ?>
+                            <span class="explore-tile__body">
+                                <span class="explore-tile__name"><?= e($pa['name']) ?> vs <?= e($pb['name']) ?></span>
+                                <span class="explore-tile__meta">Side by side</span>
+                            </span>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
             </div>
-        </div>
-        <div class="tile-scroll">
-            <?php foreach ($explorePairs as [$pa, $pb]): ?>
-                <a class="explore-tile" href="<?= e(compare_url($pa, $pb)) ?>">
-                    <?= provider_badge($pa, 'sm') ?>
-                    <span class="explore-tile__body">
-                        <span class="explore-tile__name"><?= e($pa['name']) ?> vs <?= e($pb['name']) ?></span>
-                        <span class="explore-tile__meta">Side by side</span>
-                    </span>
-                </a>
-            <?php endforeach; ?>
         </div>
     </section>
 
     <section class="section">
         <div class="section-head reveal">
             <div class="section-head__title">
-                <span class="kicker kicker--signal">05 / Recommended</span>
+                <span class="kicker kicker--signal">02 / Recommended</span>
                 <h2>HostingInfo recommends</h2>
             </div>
             <a href="<?= url('providers') ?>" class="section-head__link">Open the directory
@@ -382,7 +376,7 @@ require __DIR__ . '/includes/header.php';
     <section class="section">
         <div class="section-head reveal">
             <div class="section-head__title">
-                <span class="kicker kicker--signal">06 / Why trust us</span>
+                <span class="kicker kicker--signal">03 / Why trust us</span>
                 <h2>The same fields, every provider</h2>
             </div>
         </div>
@@ -431,7 +425,7 @@ require __DIR__ . '/includes/header.php';
     <section class="section">
         <div class="section-head reveal">
             <div class="section-head__title">
-                <span class="kicker kicker--signal">07 / Exclusives</span>
+                <span class="kicker kicker--signal">04 / Exclusives</span>
                 <h2>Our top <?= count($topCoupons) ?> hosting coupons</h2>
             </div>
             <a href="<?= url('deals') ?>" class="section-head__link">All <?= count($allDeals) ?> deals
@@ -472,7 +466,7 @@ require __DIR__ . '/includes/header.php';
     <section class="section reveal">
         <div class="tools-teaser-head section-head">
             <div class="section-head__title">
-                <span class="kicker kicker--signal">08 / Tools</span>
+                <span class="kicker kicker--signal">05 / Tools</span>
                 <h2>Free tools, no signup</h2>
             </div>
             <a href="<?= url('tools') ?>" class="section-head__link">Open tools hub
