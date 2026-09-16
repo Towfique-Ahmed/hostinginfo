@@ -1386,3 +1386,253 @@ a.contact-card:hover { background: var(--ink-raised); }
     .vs-head { grid-template-columns: 1fr; }
     .vs-versus { padding: 4px 0; }
 }
+
+/* ==========================================================================
+   22. Explore strips (horizontal-scroll tile rows)
+   ========================================================================== */
+.explore-strip { padding: 30px 0; border-top: 1px solid var(--rule); }
+.explore-strip__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+.explore-strip__icon {
+    flex: 0 0 38px;
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--ink-raised);
+    border-radius: var(--r-md);
+}
+.explore-strip__icon svg { width: 18px; height: 18px; stroke: var(--signal); fill: none; stroke-width: 1.6; }
+.explore-strip__title-row {
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.explore-strip__title-row h2 { font-size: 1.15rem; margin: 0 0 3px; }
+.explore-strip__desc { font-size: 0.83rem; color: var(--fg-muted); margin: 0; max-width: 52ch; }
+
+.tile-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 2px 2px 10px;
+    scroll-snap-type: x proximity;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 20px, #000 calc(100% - 20px), transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 20px, #000 calc(100% - 20px), transparent 100%);
+}
+.tile-scroll::-webkit-scrollbar { height: 5px; }
+.tile-scroll::-webkit-scrollbar-thumb { background: var(--rule-strong); border-radius: 3px; }
+
+.explore-tile {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ink);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+    padding: 11px 16px;
+    min-width: 188px;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.explore-tile:hover { border-color: var(--rule-strong); background: var(--ink-raised); }
+.explore-tile__icon { flex-shrink: 0; }
+.explore-tile__icon svg { width: 16px; height: 16px; stroke: var(--signal); fill: none; stroke-width: 1.6; }
+.explore-tile__body { min-width: 0; }
+.explore-tile__name { font-size: 0.85rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.explore-tile__meta { font-size: 0.72rem; color: var(--fg-faint); font-family: var(--font-mono); white-space: nowrap; }
+
+/* ==========================================================================
+   23. Recommended providers (tabbed)
+   ========================================================================== */
+.rec-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding-bottom: 16px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--rule);
+}
+.rec-tab {
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--fg-muted);
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 7px 15px;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+.rec-tab:hover { color: var(--fg); border-color: var(--rule-strong); }
+.rec-tab.is-active { background: var(--fg); border-color: var(--fg); color: var(--ink); }
+
+.rec-panel { display: none; }
+.rec-panel.is-active { display: block; }
+
+.rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); gap: 16px; }
+
+.rec-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: var(--ink);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+    padding: 20px;
+    transition: border-color 0.15s ease;
+}
+.rec-card:hover { border-color: var(--rule-strong); }
+
+.rec-card__label {
+    position: absolute;
+    top: -1px; left: 16px;
+    background: var(--money);
+    color: var(--signal-ink);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 0 0 4px 4px;
+}
+
+.rec-card__head { display: flex; align-items: center; gap: 12px; }
+.rec-card__name { font-family: var(--font-display); font-size: 1.05rem; }
+.rec-card__name a { color: inherit; }
+.rec-card__origin { font-size: 0.76rem; color: var(--fg-faint); }
+
+.rec-card__bullets { display: flex; flex-direction: column; gap: 6px; }
+.rec-card__bullets li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--fg-muted);
+    line-height: 1.4;
+}
+.rec-card__bullets svg { width: 14px; height: 14px; margin-top: 2px; stroke: var(--money); fill: none; stroke-width: 2.2; flex-shrink: 0; }
+
+.rec-card__score {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+}
+.rec-card__score-num {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    color: var(--signal);
+    line-height: 1;
+}
+.rec-card__score-name { font-size: 0.74rem; color: var(--fg-faint); margin-top: 3px; }
+
+.rec-card__foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.rec-card__price { font-family: var(--font-mono); font-size: 1rem; color: var(--fg); }
+.rec-card__price small { color: var(--fg-faint); font-size: 0.7rem; }
+.rec-card__actions { display: flex; gap: 8px; }
+
+/* ==========================================================================
+   24. Why trust us (tabbed)
+   ========================================================================== */
+.trust-layout { display: grid; grid-template-columns: 220px 1fr; gap: 32px; }
+.trust-tabs { display: flex; flex-direction: column; gap: 4px; }
+.trust-tab {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-sans);
+    font-size: 0.87rem;
+    font-weight: 500;
+    text-align: left;
+    color: var(--fg-muted);
+    background: transparent;
+    border: 0;
+    border-left: 2px solid var(--rule);
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+.trust-tab svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; flex-shrink: 0; }
+.trust-tab:hover { color: var(--fg); }
+.trust-tab.is-active { color: var(--signal); border-left-color: var(--signal); }
+
+.trust-panel { display: none; }
+.trust-panel.is-active { display: block; }
+.trust-panel p { font-size: 0.95rem; line-height: 1.7; color: var(--fg-muted); max-width: var(--measure); margin: 0 0 16px; }
+
+.trust-expert {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px;
+    background: var(--ink-raised);
+    border-radius: var(--r-md);
+    margin-bottom: 16px;
+}
+.trust-expert__avatar {
+    width: 46px; height: 46px; flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--signal);
+    color: var(--signal-ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 600;
+}
+.trust-expert__name { font-size: 0.92rem; font-weight: 600; }
+.trust-expert__role { font-size: 0.78rem; color: var(--fg-faint); }
+
+/* ==========================================================================
+   25. Featured coupon cards
+   ========================================================================== */
+.fc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+.fc-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: var(--ink);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+    padding: 22px;
+}
+.fc-card__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.fc-tags { display: flex; gap: 6px; }
+.fc-tag {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 999px;
+}
+.fc-tag--verified { color: var(--money); background: color-mix(in srgb, var(--money) 14%, transparent); }
+.fc-tag--exclusive { color: var(--signal); background: color-mix(in srgb, var(--signal) 14%, transparent); }
+.fc-card__title { font-size: 1rem; margin: 0; }
+.fc-card__desc { font-size: 0.84rem; color: var(--fg-muted); margin: -8px 0 0; }
+.fc-card__actions { margin-top: auto; }
+
+/* ==========================================================================
+   26. Homepage tools teaser
+   ========================================================================== */
+.tools-teaser-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+@media (max-width: 800px) {
+    .trust-layout { grid-template-columns: 1fr; }
+    .trust-tabs { flex-direction: row; overflow-x: auto; border-bottom: 1px solid var(--rule); padding-bottom: 4px; }
+    .trust-tab { border-left: 0; border-bottom: 2px solid transparent; white-space: nowrap; }
+    .trust-tab.is-active { border-bottom-color: var(--signal); }
+}
+
+@media (max-width: 640px) {
+    .rec-tabs { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 12px; }
+    .rec-tab { flex-shrink: 0; }
+}

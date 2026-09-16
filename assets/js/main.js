@@ -93,6 +93,22 @@
         });
     }
 
+    /* ---------------- Tab groups (recommended providers, why trust us) ---------------- */
+    document.querySelectorAll('[data-tabgroup]').forEach(function (group) {
+        var key = group.getAttribute('data-tabgroup');
+        var panelGroup = document.querySelector('[data-tabpanels="' + key + '"]');
+        if (!panelGroup) return;
+        var tabs = group.querySelectorAll('[data-tab]');
+        var panels = panelGroup.querySelectorAll('[data-tab]');
+        tabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                var val = tab.getAttribute('data-tab');
+                tabs.forEach(function (t) { t.classList.toggle('is-active', t === tab); });
+                panels.forEach(function (p) { p.classList.toggle('is-active', p.getAttribute('data-tab') === val); });
+            });
+        });
+    });
+
     /* ---------------- Scroll reveal ---------------- */
     var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var revealTargets = document.querySelectorAll('.reveal');
