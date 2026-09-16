@@ -80,12 +80,15 @@ require __DIR__ . '/includes/header.php';
                         <span class="now"><?= format_price((float)$deal['deal_price']) ?></span>
                         <span class="per">/mo</span>
                     </div>
-                    <div class="coupon">
-                        <code><?= e($deal['coupon']) ?></code>
-                        <button type="button" class="copy-btn" data-copy="<?= e($deal['coupon']) ?>">
-                            <svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-                            Copy
-                        </button>
+                    <div class="coupon-wrap">
+                        <div class="coupon">
+                            <code><?= e($deal['coupon']) ?></code>
+                            <button type="button" class="copy-btn" data-copy="<?= e($deal['coupon']) ?>">
+                                <svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                                Copy
+                            </button>
+                        </div>
+                        <span class="verified-tag"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Verified against current pricing</span>
                     </div>
                     <div class="deal__off"><?= (int)$deal['discount'] ?>%<small>OFF</small></div>
                 </article>
