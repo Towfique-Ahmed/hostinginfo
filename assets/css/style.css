@@ -1,39 +1,39 @@
 /* ==========================================================================
-   HostingInfo — editorial directory stylesheet
+   HostingInfo — directory stylesheet
    --------------------------------------------------------------------------
-   Design language: ink & paper. A near-black graphite ground, warm off-white
-   type, hairline rules, and exactly one signal colour. Typography and density
-   carry the design — no gradients, no glows, no glass. Data is set in
-   monospace so figures align down a column and can be scanned.
+   Design language: a clean, trust-blue theme set in Lato, with a light
+   surface as the default reading environment and a matching dark mode.
+   Figures are set in monospace so they align down a column and can be
+   scanned at a glance.
    ========================================================================== */
 
 /* ==========================================================================
    1. Tokens
    ========================================================================== */
 :root {
-    /* surfaces — dark is the default reading environment */
-    --ink: #0a0a0c;
-    --ink-raised: #111114;
-    --ink-hover: #17171b;
-    --ink-sunken: #060607;
+    /* surfaces — light is the default reading environment */
+    --ink: #ffffff;
+    --ink-raised: #f3f7fc;
+    --ink-hover: #e8f1fb;
+    --ink-sunken: #eef1f6;
 
     /* hairlines */
-    --rule: #232329;
-    --rule-strong: #35353e;
+    --rule: #e1e5ec;
+    --rule-strong: #c7cedb;
 
     /* type */
-    --fg: #eceae5;
-    --fg-muted: #9d9b95;
-    --fg-faint: #6b6a66;
+    --fg: #0b0c0f;
+    --fg-muted: #4d5566;
+    --fg-faint: #838da0;
 
-    /* one signal colour, plus a semantic green reserved for money */
-    --signal: #e9ab4c;
-    --signal-ink: #17130a;
-    --money: #6fc78d;
-    --alert: #e2795f;
+    /* one signal colour (brand blue), plus semantic green/red */
+    --signal: #0d80f2;
+    --signal-ink: #ffffff;
+    --money: #1f8f2c;
+    --alert: #e0481f;
 
-    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
-    --font-sans: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-sans: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
     --r-sm: 3px;
@@ -43,28 +43,28 @@
     --gutter: 28px;
     --measure: 68ch;
 
-    color-scheme: dark;
+    color-scheme: light;
 }
 
-:root[data-theme="light"] {
-    --ink: #f7f5f0;
-    --ink-raised: #ffffff;
-    --ink-hover: #efece4;
-    --ink-sunken: #eae7de;
+:root[data-theme="dark"] {
+    --ink: #0a0e16;
+    --ink-raised: #121826;
+    --ink-hover: #1a2233;
+    --ink-sunken: #060911;
 
-    --rule: #ddd8cc;
-    --rule-strong: #c2bcac;
+    --rule: #202a3a;
+    --rule-strong: #33415a;
 
-    --fg: #16150f;
-    --fg-muted: #57544b;
-    --fg-faint: #86827a;
+    --fg: #eef2f8;
+    --fg-muted: #97a2b5;
+    --fg-faint: #626e82;
 
-    --signal: #a4671a;
-    --signal-ink: #fffdf7;
-    --money: #1d7a4e;
-    --alert: #b1442a;
+    --signal: #3d9bff;
+    --signal-ink: #06111f;
+    --money: #3fcf6d;
+    --alert: #ff6a45;
 
-    color-scheme: light;
+    color-scheme: dark;
 }
 
 /* ==========================================================================
@@ -88,11 +88,10 @@ body {
 
 h1, h2, h3, h4 {
     font-family: var(--font-display);
-    font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: -0.015em;
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: -0.01em;
     margin: 0 0 0.4em;
-    font-optical-sizing: auto;
 }
 
 p { margin: 0 0 1em; color: var(--fg-muted); }
