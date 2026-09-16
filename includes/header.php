@@ -7,7 +7,7 @@ $page_description = $page_description ?? 'An independent reference for web hosti
 $active_nav = $active_nav ?? '';
 $robots = $robots ?? 'index, follow';
 ?><!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,10 +25,10 @@ $robots = $robots ?? 'index, follow';
 <meta name="description" content="<?= e($page_description) ?>">
 <meta name="robots" content="<?= e($robots) ?>">
 <link rel="canonical" href="<?= e(canonical_url()) ?>">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%228%22 fill=%22%230a0a0c%22/><text x=%2232%22 y=%2245%22 text-anchor=%22middle%22 font-family=%22Georgia,serif%22 font-size=%2240%22 fill=%22%23e9ab4c%22>H</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%228%22 fill=%22%230d80f2%22/><text x=%2232%22 y=%2244%22 text-anchor=%22middle%22 font-family=%22Arial,sans-serif%22 font-weight=%22700%22 font-size=%2236%22 fill=%22%23ffffff%22>H</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/style.css">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="HostingInfo">

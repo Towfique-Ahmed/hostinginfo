@@ -9,10 +9,10 @@
     var themeToggle = document.getElementById('themeToggle');
 
     (function initTheme() {
-        /* Dark is the default reading environment; only an explicit choice overrides it. */
+        /* Light is the default reading environment; only an explicit choice overrides it. */
         var saved = null;
         try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
-        root.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+        root.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
     })();
 
     if (themeToggle) {
