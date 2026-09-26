@@ -121,7 +121,7 @@ require __DIR__ . '/includes/header.php';
             <h1><?= e($category) ?> hosting, <em>compared</em>.</h1>
             <p class="lede"><?= $categoryCount ?> <?= e($category) ?> host<?= $categoryCount === 1 ? '' : 's' ?> in the directory, sortable by price, uptime, rating or age. Click a row to read the full profile.</p>
             <?php if ($category === 'Managed'): ?>
-                <p class="lede">Want a shortlist instead of the full table? Read our pick of the <a href="https://hostinginfos.com/best-managed-hosting-provider/">best managed hosting providers</a>, compared on performance, support and price.</p>
+                <p class="lede">Want a shortlist instead of the full table? Read our pick of the <a href="https://hostinginfos.com/best-managed-hosting-provider/" style="color:#2563eb; text-decoration:underline">best managed hosting providers</a>, compared on performance, support and price.</p>
             <?php endif; ?>
         <?php else: ?>
             <span class="kicker">The directory</span>
